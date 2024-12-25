@@ -11,6 +11,12 @@ export function Hearos(){
                     className="object-contain"
                     alt = "Document"/>
                 </div>
+                <div className="relative h-[400px] w-[400px] hidden md:block">
+                    <Image src = {files}
+                    fill 
+                    className="object-contain"
+                    alt = "Document"/>
+                </div>
             </div>
         </div>
     );
