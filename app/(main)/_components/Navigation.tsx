@@ -1,10 +1,12 @@
 "use client"
 
 import { cn } from "@/lib/utils";
+import { UserButton } from "@clerk/clerk-react";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ComponentRef, useEffect, useRef, useState } from "react";
 import {useMediaQuery} from "usehooks-ts"
+import UserItem from "./user-item";
 
 export default function Navigation(){
     const pathname = usePathname();
@@ -110,7 +112,7 @@ export default function Navigation(){
                     <ChevronsLeft className="h-6 w-6"/>
                 </div>
                 <div>
-                    <p>Активные предметы</p>
+                    <UserItem/>
                 </div>
                 <div className="mt-4">
                     <p>Документы</p>
