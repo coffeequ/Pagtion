@@ -190,3 +190,22 @@ export const remove = mutation({
         return document;
     }
 })
+
+
+export const getSearch = query({
+    handler: async (ctx) => {
+
+        const identity = await ctx.auth.getUserIdentity();
+
+        if(!identity){
+            throw new Error("Ошибка авторизации");
+        }
+
+        const userId = identity.subject;
+
+        const document = await ctx.db.query("documents").withIndex('by_user', (q) => q.eq("userId", userId)).filter((q) => q.eq(q.field("isArchived"), false)).order("desc").collect();
+
+        return document;
+
+    }
+})

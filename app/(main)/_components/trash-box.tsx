@@ -62,14 +62,14 @@ export default function TrashBox(){
 
     if(documents === undefined){
         return(
-            <div className="h-full flex items-center justify-center p-4">
+            <div className="h-full border flex items-center justify-center p-4">
                 <Spinner size="lg"/>
             </div>
         );
     }
 
     return(
-        <div className="text-sm">
+        <div className="text-sm border ml-1">
             <div className="flex items-center gap-x-1 p-2">
                 <Search className="h-4 w-4"/>
                 <Input value={search} onChange={(e) => setSearch(e.target.value)} className="h-7 px-2 focus-visible:ring-transparent bg-secondary" placeholder="Поиск по наимнованию страницы" />
