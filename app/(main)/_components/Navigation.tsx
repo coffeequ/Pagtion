@@ -11,7 +11,7 @@ import { api } from "@/convex/_generated/api";
 import Item from "./Item";
 import { toast } from "sonner";
 import DocumentList from "./document-list";
-import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { Popover, PopoverTrigger } from "@/components/ui/popover"
 import { PopoverContent } from "@radix-ui/react-popover";
 import TrashBox from "./trash-box";
 
@@ -122,9 +122,7 @@ export default function Navigation(){
                     isResetting && "transition-all ease-in-out duration-300", isMobile && "w-0"
                 )
             }>
-                <div role = "button" onClick={collapse} className ={cn("h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition",
-                    isMobile && "opacity-100")
-                }>
+                <div role = "button" onClick={collapse} className ={cn("h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition", isMobile && "opacity-100")}>
                     <ChevronsLeft className="h-6 w-6"/>
                 </div>
                 <div>
