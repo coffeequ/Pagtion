@@ -14,8 +14,12 @@ import DocumentList from "./document-list";
 import { Popover, PopoverTrigger } from "@/components/ui/popover"
 import { PopoverContent } from "@radix-ui/react-popover";
 import TrashBox from "./trash-box";
+import { useSearch } from "@/hooks/use-search";
+import { useSettings } from "@/hooks/use-settings";
 
 export default function Navigation(){
+    const settings = useSettings();
+    const search = useSearch();
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px)");
     const create = useMutation(api.documents.create);
@@ -119,9 +123,8 @@ export default function Navigation(){
         <>
             <aside ref={sidebarRef} className={
                 cn("group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
-                    isResetting && "transition-all ease-in-out duration-300", isMobile && "w-0"
-                )
-            }>
+                    isResetting && "transition-all ease-in-out duration-300", isMobile && "w-0")}>
+                        
                 <div role = "button" onClick={collapse} className ={cn("h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition", isMobile && "opacity-100")}>
                     <ChevronsLeft className="h-6 w-6"/>
                 </div>
@@ -131,12 +134,12 @@ export default function Navigation(){
                         label="Поиск"
                         icon={Search}
                         isSearch
-                        onClick={() => {}}
+                        onClick={search.onOpen}
                     />
                     <Item 
                         label="Настройки"
                         icon={Settings}
-                        onClick={() => {}}
+                        onClick={settings.onOpen}
                     />
                     <Item onClick = {handleCreateNote} label = "Новая страница" icon = {PlusCircle} />
                 </div>

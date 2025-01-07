@@ -7,15 +7,12 @@ import { useSearch } from "@/hooks/use-search";
 import { useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandList } from "./ui/command";
-import { CommandItem } from "cmdk";
 import { File } from "lucide-react";
 import { DialogTitle } from "./ui/dialog";
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command"; 
 
 export default function SearchCommand(){
     
-    const { user } = useUser();
-
     const router = useRouter();
 
     const [isMounted, setIsMounted] = useState(false);
@@ -58,12 +55,12 @@ export default function SearchCommand(){
 
     return(
         <CommandDialog open = {isOpen} onOpenChange={onClose}>
-            <CommandInput placeholder={`Поиск в pagtion...`}/>
+            <CommandInput/>
             <CommandList>
                 <CommandEmpty>Не было найдено результатов</CommandEmpty>
                 <DialogTitle></DialogTitle>
                 <CommandGroup heading="Заметки">
-                    {
+                {
                         documents?.map((document) => (
                             <CommandItem key = {document._id} value={`${document._id} - ${document.title}`} title={document.title} onSelect={onSelect}>
                                 {
