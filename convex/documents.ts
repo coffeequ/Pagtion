@@ -2,6 +2,7 @@ import { v } from "convex/values"
 
 import { mutation, query } from "./_generated/server"
 import { Doc, Id } from "./_generated/dataModel"
+import { use } from "react";
 
 export const archive = mutation({
     args: { id: v.id("documents") },
@@ -9,7 +10,7 @@ export const archive = mutation({
         const identity = await ctx.auth.getUserIdentity();
 
         if(!identity) {
-            throw new Error("Пользователь не авторизован");
+            throw new Error("Ошибка авторизации");
         }
 
         const userId = identity.subject;
@@ -75,7 +76,7 @@ export const create = mutation({
         const identity = await ctx.auth.getUserIdentity();
 
         if(!identity){
-            throw new Error("Не зарегистрирован");
+            throw new Error("Ошибка авторизации");
         }
 
         const userId: string = identity.subject;
@@ -209,3 +210,74 @@ export const getSearch = query({
 
     }
 })
+
+
+export const getById = query({
+    args: {documentId: v.id("documents")},
+    handler: async(ctx, args) => {
+
+        const identity = await ctx.auth.getUserIdentity();
+        
+        const document = await ctx.db.get(args.documentId);
+
+        if(!document){
+            throw new Error("Не найдено");
+        }
+
+        if(document.isPublished && !document.isArchived){
+            return document;
+        }
+
+        if(!identity){
+            throw new Error("Пользователь не авторизиован");
+        }
+
+        const userId = identity.subject;
+
+        if(document.userId !== userId){
+            throw new Error("Пользователь не авторизован");
+        }
+
+        return document;
+
+    }
+})
+
+
+export const update = mutation({
+    args: {
+        id: v.id("documents"),
+        title: v.optional(v.string()),
+        content: v.optional(v.string()),
+        coverImage: v.optional(v.string()),
+        icon: v.optional(v.string()),
+        isPublished: v.optional(v.boolean())
+    },
+    handler: async(ctx, args) =>{
+        const identity = await ctx.auth.getUserIdentity();
+
+        if(!identity){
+            throw new Error("Ошибка авторизации");
+        }
+
+        const userId = identity.subject;
+
+        const {id, ...rest} = args;
+
+        const existingDocument = await ctx.db.get(args.id);
+
+        if(!existingDocument){
+            throw new Error("Не найдено");
+        }
+
+        if(existingDocument.userId !== userId){
+            throw new Error("Пользователь не авторизован");
+        }
+
+        const document = await ctx.db.patch(args.id, {
+            ...rest,
+        });
+
+        return document;
+    }
+});

@@ -36,7 +36,7 @@ export default function Heading(){
             {
                 isAuthenticated && !isLoading && (
                     <Button className={cn(fontInter)} asChild>
-                        <Link href="/document">
+                        <Link href="/documents">
                             Войти в Pagtion
                             <ArrowRight className="h-4 w-4"/>
                         </Link>
