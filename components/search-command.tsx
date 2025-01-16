@@ -34,12 +34,12 @@ export default function SearchCommand(){
             if(e.key === 'k' && (e.metaKey || e.ctrlKey)){
                 e.preventDefault();
                 toggle();
-
             }
         }
 
         document.addEventListener("keydown", down);
         return () => {
+            console.log("Удаление события нажатия кнопок");
             document.removeEventListener("keydown", down);
         }
     }, [toggle]);

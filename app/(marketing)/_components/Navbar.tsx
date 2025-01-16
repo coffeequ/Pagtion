@@ -23,9 +23,11 @@ export default function Navbar(){
     const {isAuthenticated, isLoading} = useConvexAuth()
 
     return(
-        <div className= {cn("z-50 bg-background dark:bg-[#1F1F1F] fixed top-0 flex items-center w-full p-6", scrolled && "border-b shadow-sm ")}>
+        <div className= {cn("z-50 bg-background dark:bg-[#1F1F1F] fixed top-0 grid grid-cols-5 gap-1 items-center w-full p-2 pt-3", scrolled && "shadow-sm bg-background/55 backdrop-blur-md")}>
+            <div></div>
             <Logo/>
-            <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-2">
+            <div></div>
+            <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-1">
                 {isLoading && (
                     <Spinner/>
                 )}
@@ -40,19 +42,24 @@ export default function Navbar(){
                         </>
                     )
                 }
+
                 {
                     isAuthenticated && !isLoading && (
                         <>
-                            <Button className={cn(fontInter)} variant="ghost" size="sm" asChild>
+                            <Button className={cn(fontInter)} variant="ghost" asChild>
                                 <Link href="/document">
-                                    Войти в pagtion
+                                    Перейти в pagtion
                                 </Link>
                             </Button>
+                            <a className="pr-1">
+                                |
+                            </a>
                             <UserButton/>
                         </>
                     )
                 }
-                <ModeToggle/>
+                {/* <ModeToggle/> */}
+                
             </div>
         </div>
     );
