@@ -35,7 +35,7 @@ export default function Navbar(){
                     !isAuthenticated && !isLoading && (
                         <>
                             <SignInButton>
-                                <Button className={cn(fontInter)} variant="ghost" size="sm">
+                                <Button className={cn(fontInter)} variant="ghost">
                                     Авторизация
                                 </Button>
                             </SignInButton>
@@ -47,7 +47,7 @@ export default function Navbar(){
                     isAuthenticated && !isLoading && (
                         <>
                             <Button className={cn(fontInter)} variant="ghost" asChild>
-                                <Link href="/document">
+                                <Link href="/documents">
                                     Перейти в pagtion
                                 </Link>
                             </Button>
