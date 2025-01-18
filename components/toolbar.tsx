@@ -8,6 +8,7 @@ import { ComponentRef, use, useRef, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import TextareaAutosize from "react-textarea-autosize"
+import { useCoverImage } from "@/hooks/use-cover-image";
 
 interface IToolbarProps{
     initialData: Doc<"documents">,
@@ -21,6 +22,8 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
     const [isEditing, setIsEditing] = useState(false);
 
     const [value, setValue] = useState(initialData.title);
+
+    const coverImage = useCoverImage();
 
     const update = useMutation(api.documents.update);
     
@@ -105,7 +108,7 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
                 }
                 {
                     !initialData.coverImage && !preview && (
-                        <Button className="text-muted-foreground text-xs" variant="outline">
+                        <Button onClick={coverImage.onOpen} className="text-muted-foreground text-xs" variant="outline">
                             <ImageIcon className="h-4 w-4 mr-2"/>
                             Добавить задний фон
                         </Button>
