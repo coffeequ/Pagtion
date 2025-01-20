@@ -6,13 +6,15 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api"
 import { PlusCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function DocumentPage(){
+    const router = useRouter();
     const { user } = useUser();
     const create = useMutation(api.documents.create);
 
     function onCreate(){
-        const promise = create({ title: "Untitled" });
+        const promise = create({ title: "Untitled" }).then((documentId) => router.push(`/documents/${documentId}`));
 
         toast.promise(promise, {
             loading: "Создание новой заметки...",

@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Trash } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { ComponentRef, useEffect, useRef, useState } from "react";
 import { useMutation } from "convex/react";
 import {useMediaQuery} from "usehooks-ts"
@@ -19,6 +19,7 @@ import { useSettings } from "@/hooks/use-settings";
 import Navbar from "./navbar";
 
 export default function Navigation(){
+    const router = useRouter();
     const settings = useSettings();
     const search = useSearch();
     const params = useParams();
@@ -112,7 +113,7 @@ export default function Navigation(){
     }
 
     function handleCreateNote() {
-        const promise = create( { title: "Untitled" } );
+        const promise = create( { title: "Untitled" } ).then((documentId) => router.push(`/documents/${documentId}`));
 
         toast.promise(promise, {
             loading: "Создание новой заметки...",
