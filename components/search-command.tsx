@@ -4,7 +4,6 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 
 import { useSearch } from "@/hooks/use-search";
-import { useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { File } from "lucide-react";
@@ -39,13 +38,13 @@ export default function SearchCommand(){
 
         document.addEventListener("keydown", down);
         return () => {
-            console.log("Удаление события нажатия кнопок");
             document.removeEventListener("keydown", down);
         }
     }, [toggle]);
 
     function onSelect(id: string): void {
         router.push(`/documents/${id}`);
+
         onClose();
     }
     
@@ -62,7 +61,8 @@ export default function SearchCommand(){
                 <CommandGroup heading="Заметки">
                 {
                         documents?.map((document) => (
-                            <CommandItem key = {document._id} value={`${document._id} - ${document.title}`} title={document.title} onSelect={onSelect}>
+                            // value={`${document._id} - ${document.title}`}
+                            <CommandItem key = {document._id} value={`${document._id}`} title={document.title} onSelect={onSelect}>
                                 {
                                     document.icon ? (
                                         <p className="mr-2 text-[18px]">
