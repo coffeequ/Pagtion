@@ -63,7 +63,6 @@ export default function Cover({ url, preview } : ICoverProps){
                     </div>
                 )
             }
-            Обложка
         </div>
     )
 }

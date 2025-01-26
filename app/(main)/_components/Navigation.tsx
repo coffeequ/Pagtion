@@ -28,8 +28,8 @@ export default function Navigation(){
     const create = useMutation(api.documents.create);
 
     const isResizingRef = useRef(false);
-    const sidebarRef = useRef<ComponentRef<"aside">>(null)
-    const navbarRef = useRef<ComponentRef<"div">>(null)
+    const sidebarRef = useRef<ComponentRef<"aside">>(null);
+    const navbarRef = useRef<ComponentRef<"div">>(null);
     const [isResetting, setIsResetting] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
@@ -61,7 +61,7 @@ export default function Navigation(){
     function handleMouseMove(event: MouseEvent) {
         if(!isResizingRef.current) return;
 
-        let newWidth: number = event.clientX;
+        let newWidth = event.clientX;
 
         if(newWidth < 240){
             newWidth = 240;
@@ -78,7 +78,7 @@ export default function Navigation(){
         }
     }
 
-    function handleMouseUp(event: MouseEvent){
+    function handleMouseUp(){
         isResizingRef.current = false;
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
@@ -163,7 +163,7 @@ export default function Navigation(){
 
                 </div>
             </aside>
-            <div ref={navbarRef} className={cn("absolute top-0 z-[99999] left-60 w-[calc(100% - 240px)]",
+            <div ref={navbarRef} className={cn("absolute top-0 z-[99999] left-60 w-[calc(100%-240px)]",
                 isResetting && "transition-all ease-in-out duration-300",
                 isMobile && "left-0 w-full"
             )}>
