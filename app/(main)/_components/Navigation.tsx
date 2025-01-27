@@ -62,8 +62,12 @@ export default function Navigation(){
        
        let newWidth = event.clientX;
 
-       if(newWidth < 240) newWidth = 240;
-       if(newWidth > 480) newWidth = 480;
+       if(newWidth < 240){
+        newWidth = 240;
+       }
+       if(newWidth > 480){
+        newWidth = 480;
+       }
 
        if(sidebarRef.current && navbarRef.current){
             sidebarRef.current.style.width = `${newWidth}px`;
