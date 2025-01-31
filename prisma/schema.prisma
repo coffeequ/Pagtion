@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Documents{
+  userId           String  @id @default(uuid())
+  title            String
+  isArchived       Boolean @default(false)
+  parentDocumentId String? @default("")
+  content          Json?
+  coverImage       String?
+  icon             String?
+  isPublished      Boolean @default(false)
+
+  parentDocument Documents? @relation("Parent", fields: [parentDocumentId], references: [userId])
+
+  children       Documents[] @relation("Parent")
+
+  @@index([userId])
+  @@index([userId, parentDocumentId])
+}
