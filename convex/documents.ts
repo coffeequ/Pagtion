@@ -2,7 +2,7 @@ import { v } from "convex/values"
 
 import { mutation, query } from "./_generated/server"
 import { Doc, Id } from "./_generated/dataModel"
-import { use } from "react";
+
 
 export const archive = mutation({
     args: { id: v.id("documents") },
@@ -211,7 +211,7 @@ export const getSearch = query({
     }
 })
 
-
+//Получение документа по айди с использованием convex
 export const getById = query({
     args: {documentId: v.id("documents")},
     handler: async(ctx, args) => {
@@ -242,6 +242,7 @@ export const getById = query({
 
     }
 })
+
 
 
 export const update = mutation({
