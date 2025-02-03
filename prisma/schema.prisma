@@ -7,17 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Documents {
-  userId           String      @id @default(uuid())
-  title            String?
+model Document {
+  id               String      @id @default(uuid())
+  userId           String
+  title            String
   isArchived       Boolean     @default(false)
-  parentDocumentId String?     @default("")
+  parentDocumentId String?
   content          Json?
   coverImage       String?
   icon             String?
   isPublished      Boolean     @default(false)
-  parentDocument   Documents?  @relation("Parent", fields: [parentDocumentId], references: [userId])
-  children         Documents[] @relation("Parent")
+  creationTime     DateTime    @default(now())
+
+  parentDocument Document?     @relation("ParentChild", fields: [parentDocumentId], references: [id])
+  
+  childDocument  Document[]    @relation("ParentChild")
 
   @@index([userId])
   @@index([userId, parentDocumentId])

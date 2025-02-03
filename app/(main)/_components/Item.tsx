@@ -1,18 +1,16 @@
-"use client"
-
+import { archived } from "@/actions/ArchiveDocument";
+import { createDocument } from "@/actions/createDocument";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
-import { useMutation } from "convex/react";
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface ItemProps {
-    id?: Id<"documents">;
+    id?: string;
     documentIcon?: string;
     active?: boolean;
     expanded?: boolean;
@@ -30,14 +28,10 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
 
     const router = useRouter();
 
-    const create = useMutation(api.documents.create);
-
-    const archive = useMutation(api.documents.archive);
-
     const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
         if(!id) return;
-        const promise = archive({ id }).then(() => router.push(`/documents`));
+        const promise = archived(id, user?.id!).then(() => router.push(`/documents`));
         toast.promise(promise, {
             loading: "Перемещение в мусорку...",
             success: "Удаление произошло успешно!",
@@ -53,12 +47,13 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
     function onCreate(event: React.MouseEvent<HTMLDivElement, MouseEvent>){
         event.stopPropagation();
         if(!id) return;
-        const promise = create({title: "Untitled", parentDocument: id}).then((documentId) => {
+        const promise = createDocument("Untitled", user?.id!, id)
+            .then((documentId) => {
             if(!expanded){
                 onExpand?.();
             }
             router.push(`/documents/${documentId}`);
-        })
+        });
         toast.promise(promise, {
             loading: "Создание новой заметки...",
             success: "Заметка была успешно создана",

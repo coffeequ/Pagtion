@@ -3,9 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { api } from "@/convex/_generated/api";
-import { Doc } from "@/convex/_generated/dataModel";
-import { useMutation } from "convex/react";
+
 import { useRef, useState } from "react";
 
 interface TitleProps{

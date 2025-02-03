@@ -4,10 +4,8 @@ import { cn } from "@/lib/utils";
 import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Trash } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ComponentRef, useEffect, useRef, useState } from "react";
-import { useMutation } from "convex/react";
 import {useMediaQuery} from "usehooks-ts"
 import UserItem from "./user-item";
-import { api } from "@/convex/_generated/api";
 import Item from "./Item";
 import { toast } from "sonner";
 import DocumentList from "./document-list";
