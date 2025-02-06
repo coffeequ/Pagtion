@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma"
 
 export async function createDocument(title: string, userId: string, parentDocumentId: string) {
-    await prisma.document.create({
+    const document = await prisma.document.create({
         data: {
             userId,
             title,
@@ -11,5 +11,7 @@ export async function createDocument(title: string, userId: string, parentDocume
             isArchived: false,
             isPublished: false
         }
-    })
+    });
+
+    return document;
 }

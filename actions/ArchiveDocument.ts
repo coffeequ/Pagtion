@@ -5,7 +5,8 @@ import { prisma } from "@/lib/prisma"
 export async function archived(documentId: string, userId: string) {
     const existDocument = await prisma.document.findFirst({
         where:{
-            id: documentId
+            id: documentId,
+            userId
         }
     });
 
@@ -17,7 +18,16 @@ export async function archived(documentId: string, userId: string) {
         throw new Error("Доступ не разрешен");
     }
 
+    const processedDocuments = new Set<string>();
+
     async function recursiveArchive(documentId: string){
+
+        if(processedDocuments.has(documentId)){
+            return;
+        }
+
+        processedDocuments.add(documentId);
+
         await prisma.document.update({
             where: { id: documentId },
             data: { isArchived: true }
@@ -35,4 +45,13 @@ export async function archived(documentId: string, userId: string) {
     }
 
     await recursiveArchive(existDocument.id);
+
+    const recursiveDocuments = await prisma.document.findMany({
+        where:{
+            userId,
+            isArchived: true
+        }
+    });
+
+    return recursiveDocuments;
 }
