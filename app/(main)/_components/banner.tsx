@@ -5,8 +5,11 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import remove from "@/actions/removeDocument";
+import restore from "@/actions/restoreDocument";
+
 interface IBannerProps{
-    documentId: Id<"documents">;
+    documentId: string
 }
 
 
@@ -14,12 +17,12 @@ export default function Banner({documentId}: IBannerProps){
 
     const router = useRouter();
 
-    const remove = useMutation(api.documents.remove);
+    const myRemove = remove;
 
-    const restore = useMutation(api.documents.restore);
+    const myRestore = restore;
 
     function onRemove(){
-        const promise = remove({ id: documentId });
+        const promise = myRemove(documentId);
 
         toast.promise(promise, {
             loading: "Удаление заметки...",
@@ -31,7 +34,7 @@ export default function Banner({documentId}: IBannerProps){
     }
 
     function onRestore(){
-        const promise = restore({ id: documentId });
+        const promise = myRestore(documentId);
 
         toast.promise(promise, {
             loading: "Восстановление заметки...",

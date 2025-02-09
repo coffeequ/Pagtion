@@ -2,7 +2,6 @@ import { archived } from "@/actions/ArchiveDocument";
 import { createDocument } from "@/actions/createDocument";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react";

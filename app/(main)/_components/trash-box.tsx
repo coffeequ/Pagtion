@@ -6,8 +6,13 @@ import { Input } from "@/components/ui/input";
 
 import { Search, Trash, Undo } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
+import trash from "@/actions/trashDocument";
+import restore from "@/actions/restoreDocument";
+import remove from "@/actions/removeDocument";
+import { Document } from "@prisma/client";
 
 export default function TrashBox(){
 
@@ -15,15 +20,26 @@ export default function TrashBox(){
 
     const params = useParams();
 
-    const documents = useQuery(api.documents.getTrash);
+    //const documents = trash;
 
-    const restore = useMutation(api.documents.restore);
+    const myRestore = restore;
 
-    const remove = useMutation(api.documents.remove);
+    const myRemove = remove
 
     const [search, setSearch] = useState("");
 
-    const filtredDocuments = documents?.filter((document) => {
+    const [documents, setDocuments] = useState<Document[]>([]);
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const data = await trash();
+            setDocuments(data);
+        }
+        fetchData();
+
+    }, []);
+
+    const filtredDocuments = documents.filter((document: Document) => {
         return document.title.toLowerCase().includes(search.toLowerCase());
     });
 
@@ -31,10 +47,10 @@ export default function TrashBox(){
         router.push(`/documents/${documentId}`);
     }
 
-    function onRestore(event: React.MouseEvent<HTMLDivElement, MouseEvent>, documentId: Id<"documents">){
+    function onRestore(event: React.MouseEvent<HTMLDivElement, MouseEvent>, documentId: string){
         event.stopPropagation();
 
-        const promise = restore({ id: documentId });
+        const promise = myRestore(documentId);
 
         toast.promise(promise, {
             loading: "Восстановление заметки...",
@@ -44,8 +60,8 @@ export default function TrashBox(){
     }
 
 
-    function onRemove(documentId: Id<"documents">){
-        const promise = remove({ id: documentId });
+    function onRemove(documentId: string){
+        const promise = myRemove(documentId);
 
         toast.promise(promise, {
             loading: "Удаление заметки...",
@@ -76,16 +92,16 @@ export default function TrashBox(){
                 <p className="hidden last:block text-xs text-center text-muted-foreground pb-2">
                     Страницы не были найдены
                 </p>
-                {filtredDocuments?.map((document) => (
-                    <div key={document._id} role = "button" onClick={() => onClick(document._id)} className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between">
+                {filtredDocuments?.map((document: Document) => (
+                    <div key={document.id} role = "button" onClick={() => onClick(document.id)} className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between">
                         <span className="truncate pl-2">
                             {document.title}
                         </span>
                         <div className="flex items-center">
-                            <div onClick={(e) => onRestore(e, document._id)} role="button" className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600">
+                            <div onClick={(e) => onRestore(e, document.id)} role="button" className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600">
                                 <Undo className="w-4 h-4 text-muted-foreground"/>
                             </div>
-                            <ConfirmModal onConfirm={() => onRemove(document._id)}>
+                            <ConfirmModal onConfirm={() => onRemove(document.id)}>
                                 <div role="button" className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600">
                                     <Trash className="h-4 w-4 text-muted-foreground"/>
                                 </div>

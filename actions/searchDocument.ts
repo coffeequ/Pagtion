@@ -1,16 +1,15 @@
-"use client"
+"use server"
 
 import { prisma } from "@/lib/prisma"
 
-export default async function trash(userId?: string) {
+export default async function searchDocument(userId: string) {
     return await prisma.document.findMany({
         where:{
             userId,
-            isArchived: true
+            isArchived: false
         },
         orderBy:{
-            parentDocumentId: "desc"
+            id: "desc"
         }
     });
 }
-

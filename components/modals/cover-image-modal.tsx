@@ -8,17 +8,14 @@ import { useCoverImage } from "@/hooks/use-cover-image";
 
 import { SingleImageDropzone } from "@/components/single-image-dropzone";
 import { useState } from "react";
-import { api } from "@/convex/_generated/api";
 import { useEdgeStore } from "@/lib/edgestore";
-import { useMutation } from "convex/react";
 import { useParams } from "next/navigation";
-import { Id } from "@/convex/_generated/dataModel";
+
+import update from "@/actions/updateDocument";
 
 export default function CoverImageModal(){
 
     const params = useParams();
-    
-    const update = useMutation(api.documents.update);
 
     const coverImage = useCoverImage();
     
@@ -47,8 +44,8 @@ export default function CoverImageModal(){
             });
             
 
-            await update({
-                id: params.documentId as Id<"documents">,
+            update({
+                documentId: params.documentId as string,
                 coverImage: res.url,
             });
 

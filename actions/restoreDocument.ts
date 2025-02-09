@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 
-export default async function restore(documentId: string, userId: string) {
+export default async function restore(documentId: string, userId?: string) {
     const existingDocument = await prisma.document.findFirst({
         where:{
             id: documentId,
@@ -39,7 +39,7 @@ export default async function restore(documentId: string, userId: string) {
         }
     }
 
-    recursiveRestore(existingDocument.id);
+    await recursiveRestore(existingDocument.id);
 
     const recursiveDocuments = await prisma.document.findMany({
         where:{

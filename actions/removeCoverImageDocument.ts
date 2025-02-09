@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 
-export default async function remove(documentId: string, userId?: string) {
+export default async function removeCoverImageDocument(documentId: string, userId: string){
     const existingDocument = await prisma.document.findFirst({
         where: {
             id: documentId,
@@ -14,12 +14,14 @@ export default async function remove(documentId: string, userId?: string) {
         throw new Error("Не найдено");
     }
 
-    const removeDocument = await prisma.document.delete({
+    const removeCoverImageDocument = await prisma.document.update({
         where: {
             id: existingDocument.id,
-            userId: existingDocument.userId
+        },
+        data: {
+            coverImage: undefined
         }
     });
 
-    return removeDocument;
+    return removeCoverImageDocument;
 }

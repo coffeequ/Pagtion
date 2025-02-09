@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 
-export async function archived(documentId: string, userId: string) {
+export async function archived(documentId: string, userId?: string) {
     const existDocument = await prisma.document.findFirst({
         where:{
             id: documentId,

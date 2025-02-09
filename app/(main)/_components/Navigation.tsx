@@ -16,6 +16,9 @@ import { useSearch } from "@/hooks/use-search";
 import { useSettings } from "@/hooks/use-settings";
 import Navbar from "./navbar";
 
+import { createDocument } from "@/actions/createDocument";
+import { useAuth } from "@clerk/clerk-react";
+
 export default function Navigation(){
     const router = useRouter();
     const settings = useSettings();
@@ -23,7 +26,9 @@ export default function Navigation(){
     const params = useParams();
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px)");
-    const create = useMutation(api.documents.create);
+    const { userId } = useAuth();
+
+    const create = createDocument;
 
     const isResizingRef = useRef(false);
     const sidebarRef = useRef<ComponentRef<"aside">>(null);
@@ -109,7 +114,7 @@ export default function Navigation(){
     }
 
     function handleCreateNote() {
-        const promise = create( { title: "Untitled" } ).then((documentId) => router.push(`/documents/${documentId}`));
+        const promise = create("Untitled", userId!).then((documentId) => router.push(`/documents/${documentId}`));
 
         toast.promise(promise, {
             loading: "Создание новой заметки...",

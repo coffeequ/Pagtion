@@ -11,29 +11,30 @@ import {
 } from "@/components/ui/popover"
 import useOrigin from "@/hooks/use-origin";
 import { Button } from "@/components/ui/button";
+import { Document } from "@prisma/client";
 
-
+import update from "@/actions/updateDocument";
 
 interface IPublishProps {
-    initialData: Doc<"documents">
+    initialData: Document
 }
 
 export default function Publish({ initialData } : IPublishProps) {
     const origin = useOrigin();
 
-    const update = useMutation(api.documents.update);
+    const myUpdate = update;
 
     const [copied, setCopied] = useState(false);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const url = `${origin}/preview/${initialData._id}`;
+    const url = `${origin}/preview/${initialData.id}`;
 
     function onPublished() {
         setIsSubmitting(true);
         
-        const promise = update({
-            id: initialData._id,
+        const promise = myUpdate({
+            documentId: initialData.id,
             isPublished: true,
         }).finally(() => setIsSubmitting(false));
         toast.promise(promise, {
@@ -47,7 +48,7 @@ export default function Publish({ initialData } : IPublishProps) {
         setIsSubmitting(true);
         
         const promise = update({
-            id: initialData._id,
+            documentId: initialData.id,
             isPublished: false,
         }).finally(() => setIsSubmitting(false));
         toast.promise(promise, {

@@ -7,6 +7,10 @@ import Banner from "./banner";
 import Menu from "./menu";
 import Publish from "./publish";
 
+import getId from "@/actions/idDocument";
+import { useEffect, useState } from "react";
+import { Document } from "@prisma/client";
+import { useAuth } from "@clerk/clerk-react";
 
 
 interface NavbarProps {
@@ -16,11 +20,19 @@ interface NavbarProps {
 
 export default function Navbar({ isCollapsed, onResetWidth } : NavbarProps) {
     
+    const [document, setDocuments] = useState<Document>();
+
+    const { userId } = useAuth();
+
     const params = useParams();
 
-    const document = useQuery(api.documents.getById, {
-        documentId: params.documentId as Id<"documents">
-    });
+    useEffect(() => {
+        const fetchDocuments = async () => {
+            const data = await getId(params.documentId as string, userId!);
+            setDocuments(data); 
+        }
+        fetchDocuments();
+    }, []);
 
     if(document === undefined){
         return (
@@ -49,13 +61,13 @@ export default function Navbar({ isCollapsed, onResetWidth } : NavbarProps) {
                     <Title initialData = {document}/>
                     <div className="flex items-center gap-x-2">
                         <Publish initialData = {document} />
-                        <Menu documentId = {document._id} />
+                        <Menu documentId = {document.id} />
                     </div>
                 </div>
             </nav>
             {
                 document.isArchived && (
-                    <Banner documentId = {document._id} />
+                    <Banner documentId = {document.id} />
                 )
             }
         </>

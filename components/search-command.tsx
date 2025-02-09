@@ -1,7 +1,6 @@
 "use client"
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+import searchDocument  from "@/actions/searchDocument"
 
 import { useSearch } from "@/hooks/use-search";
 import { useRouter } from "next/navigation";
@@ -9,14 +8,18 @@ import { useEffect, useState } from "react";
 import { File } from "lucide-react";
 import { DialogTitle } from "./ui/dialog";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command"; 
+import { Document } from "@prisma/client";
+import { useAuth } from "@clerk/clerk-react";
 
 export default function SearchCommand(){
     
     const router = useRouter();
 
+    const { userId } = useAuth();
+
     const [isMounted, setIsMounted] = useState(false);
 
-    const documents = useQuery(api.documents.getSearch);
+    const [documents, setDocuments] = useState<Document[]>([]);
 
     const toggle = useSearch((store) => store.toggle);
 
@@ -26,6 +29,15 @@ export default function SearchCommand(){
 
     useEffect(() => {
         setIsMounted(true);
+    }, []);
+
+    useEffect(() => {
+        async function fetchDocument(){
+            const data = await searchDocument(userId!);
+            setDocuments(data);
+        }
+        
+        fetchDocument();
     }, []);
 
     useEffect(() => {
@@ -62,7 +74,7 @@ export default function SearchCommand(){
                 {
                         documents?.map((document) => (
                             // value={`${document._id} - ${document.title}`}
-                            <CommandItem key = {document._id} value={`${document._id}`} title={document.title} onSelect={onSelect}>
+                            <CommandItem key = {document.id} value={`${document.id}`} title={document.title} onSelect={onSelect}>
                                 {
                                     document.icon ? (
                                         <p className="mr-2 text-[18px]">

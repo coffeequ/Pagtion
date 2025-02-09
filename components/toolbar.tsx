@@ -1,17 +1,19 @@
 "use client"
 
-import { Doc } from "@/convex/_generated/dataModel";
 import IconPicker from "./icon-picker";
 import { Button } from "@/components/ui/button";
 import { Flashlight, ImageIcon, Smile, X } from "lucide-react";
 import { ComponentRef, use, useRef, useState } from "react";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
+
 import TextareaAutosize from "react-textarea-autosize"
 import { useCoverImage } from "@/hooks/use-cover-image";
+import { Document } from "@prisma/client";
 
-interface IToolbarProps{
-    initialData: Doc<"documents">,
+import update from "@/actions/updateDocument";
+import removeIcon from "@/actions/removeIconDocument";
+
+interface IToolbarProps {
+    initialData: Document
     preview?: boolean,
 }
 
@@ -24,10 +26,6 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
     const [value, setValue] = useState(initialData.title);
 
     const coverImage = useCoverImage();
-
-    const update = useMutation(api.documents.update);
-    
-    const removeIcon = useMutation(api.documents.removeIcon);
 
     function enableInput() {
         if(preview) return;
@@ -47,7 +45,7 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
     function onInput(value: string) {
         setValue(value);
         update({
-            id: initialData._id,
+            documentId: initialData.id,
             title: value || "Untitled"
         });
     }
@@ -61,15 +59,13 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
 
     function onIconSelect(icon: string){
         update({
-            id: initialData._id,
+            documentId: initialData.id,
             icon
         });
     }
 
     function onIconRemove(){
-        removeIcon({
-            id: initialData._id
-        });
+        removeIcon(initialData.id);
     }
 
     return(

@@ -4,13 +4,14 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { ImageIcon, X } from "lucide-react";
-import { useMutation } from "convex/react";
 import { useCoverImage } from "@/hooks/use-cover-image";
-import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
-import { Id } from "@/convex/_generated/dataModel";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Skeleton } from "./ui/skeleton";
+
+import removeCoverImageDocument from "@/actions/removeCoverImageDocument";
+
+import { useAuth } from "@clerk/clerk-react";
 
 interface ICoverProps {
     url?: string,
@@ -21,11 +22,11 @@ export default function Cover({ url, preview } : ICoverProps){
     
     const { edgestore } = useEdgeStore();
 
+    const { userId } = useAuth();
+
     const params = useParams();
 
     const coverImage = useCoverImage();
-
-    const removeCoverImage = useMutation(api.documents.removeCoverImage);
 
     async function onRemove () {
         if(url){
@@ -34,9 +35,7 @@ export default function Cover({ url, preview } : ICoverProps){
             });
         }
 
-        removeCoverImage({
-            id: params.documentId as Id<"documents">
-        });
+        await removeCoverImageDocument(params.documentId as string, userId!);
     }
     
     return(

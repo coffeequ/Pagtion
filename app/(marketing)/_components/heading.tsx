@@ -3,8 +3,8 @@
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { SignInButton } from "@clerk/clerk-react";
-import { useConvexAuth } from "convex/react";
+import { SignInButton, useAuth } from "@clerk/clerk-react";
+import { auth } from '@clerk/nextjs/server'
 import { ArrowRight } from "lucide-react";
 import { Inter } from "next/font/google";
 import Link from "next/link";
@@ -16,7 +16,7 @@ const fontInter = Inter({
 
 export default function Heading(){
 
-    const {isAuthenticated, isLoading} = useConvexAuth();
+    const { isLoaded, isSignedIn } = useAuth()
 
     return(
         <div className="max-w-3xl space-y-4">
@@ -27,14 +27,14 @@ export default function Heading(){
                 лучше, быстрее, продуктивнее
             </h3>
             {
-                isLoading && (
+                isLoaded && (
                     <div className="w-full flex items-center justify-center">
                         <Spinner size="lg"/>    
                     </div>
                 )
             }
             {
-                isAuthenticated && !isLoading && (
+                isSignedIn && !isLoaded && (
                     <Button className={cn(fontInter)} asChild>
                         <Link href="/documents">
                             Войти в Pagtion
@@ -44,7 +44,7 @@ export default function Heading(){
                 )
             }
             {
-                !isAuthenticated && !isLoading && (
+                !isSignedIn && !isLoaded && (
                     <SignInButton mode="modal">
                         <Button className={cn(fontInter)}>
                             Let`s go

@@ -10,9 +10,10 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Trash } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { archived } from "@/actions/ArchiveDocument";
 
 interface IMenuProps {
-    documentId: Id<"documents">;
+    documentId: string;
 }
 
 export default function Menu({documentId} : IMenuProps) {
@@ -21,10 +22,10 @@ export default function Menu({documentId} : IMenuProps) {
 
     const { user } = useUser();
 
-    const archive = useMutation(api.documents.archive);
+    const archive = archived;
 
     function onArchive() {
-        const promise = archive({ id: documentId });
+        const promise = archive(documentId);
 
         toast.promise(promise, {
             loading: "Перемещение в мусорку...",
