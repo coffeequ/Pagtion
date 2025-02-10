@@ -13,7 +13,7 @@ model Document {
   title            String
   isArchived       Boolean     @default(false)
   parentDocumentId String?
-  content          Json?
+  content          String?
   coverImage       String?
   icon             String?
   isPublished      Boolean     @default(false)

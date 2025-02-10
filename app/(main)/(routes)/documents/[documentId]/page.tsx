@@ -7,8 +7,6 @@ import { useEffect, useMemo, useState } from "react";
 import Toolbar from "@/components/toolbar";
 import Cover from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
-
-import { prisma } from "@/lib/prisma";
 import update from "@/actions/updateDocument";
 import getId from "@/actions/idDocument";
 import { useAuth } from "@clerk/clerk-react";
@@ -39,7 +37,7 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
     function onChange(content: string) {
         update({
             documentId: params.documentId,
-            myContent: content
+            content
         })
     }
 
@@ -72,7 +70,7 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
             <Cover url = {document.coverImage!} />
             <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
                 <Toolbar initialData = { document } />
-                <Editor onChange = {onChange} initialContent = { document.content?.toString() } />
+                <Editor onChange = {onChange} initialContent = { document.content } />
             </div>
         </div> 
     );

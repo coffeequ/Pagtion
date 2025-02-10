@@ -8,7 +8,7 @@ import { useUser } from "@clerk/clerk-react";
 
 export default function MainLayot({ children } : { children:React.ReactNode }){
 
-    const {isSignedIn, isLoaded, user} = useUser();
+    const {isSignedIn, isLoaded} = useUser();
 
     //const {isAuthenticated, isLoading} = useConvexAuth();
 

@@ -14,7 +14,7 @@ import { useTheme } from "next-themes";
 
 interface IEditorProps{
     onChange: (value: string) => void;
-    initialContent?: string;
+    initialContent?: string | null;
     editable?: boolean;
 }
 

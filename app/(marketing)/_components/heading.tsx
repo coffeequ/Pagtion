@@ -17,7 +17,7 @@ const fontInter = Inter({
 export default function Heading(){
 
     const { isLoaded, isSignedIn } = useAuth()
-
+    
     return(
         <div className="max-w-3xl space-y-4">
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
@@ -27,14 +27,14 @@ export default function Heading(){
                 лучше, быстрее, продуктивнее
             </h3>
             {
-                isLoaded && (
+                !isLoaded && (
                     <div className="w-full flex items-center justify-center">
                         <Spinner size="lg"/>    
                     </div>
                 )
             }
             {
-                isSignedIn && !isLoaded && (
+                isSignedIn && isLoaded && (
                     <Button className={cn(fontInter)} asChild>
                         <Link href="/documents">
                             Войти в Pagtion

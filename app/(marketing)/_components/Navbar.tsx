@@ -28,11 +28,11 @@ export default function Navbar(){
             <Logo/>
             <div></div>
             <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-1">
-                {isLoaded && (
+                {!isLoaded && (
                     <Spinner/>
                 )}
                 {
-                    !isSignedIn && !isLoaded && (
+                    !isSignedIn && isLoaded && (
                         <>
                             <SignInButton>
                                 <Button className={cn(fontInter)} variant="ghost">
@@ -44,7 +44,7 @@ export default function Navbar(){
                 }
 
                 {
-                    isSignedIn && !isLoaded && (
+                    isSignedIn && isLoaded && (
                         <>
                             <Button className={cn(fontInter)} variant="ghost" asChild>
                                 <Link href="/documents">

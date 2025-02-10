@@ -1,7 +1,7 @@
 "use client"
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, cache } from "react";
 import Item from "./Item";
 import { cn } from "@/lib/utils";
 import { FileIcon } from "lucide-react";
@@ -13,9 +13,10 @@ interface DocumentListProps{
     parentDocumentId?: string;
     level?: number;
     data?: Document[];
+    stateUpdate?: boolean,
 }
 
-export default function DocumentList({ parentDocumentId, level = 0 } : DocumentListProps) {
+export default function DocumentList({ parentDocumentId, level = 0, stateUpdate} : DocumentListProps) {
 
     const params = useParams();
 
@@ -38,7 +39,7 @@ export default function DocumentList({ parentDocumentId, level = 0 } : DocumentL
             setDocuments(data);
         }
         fetchDocuments();
-    }, [parentDocumentId]);
+    }, [stateUpdate]);
 
     function onRedirect(documentId: string){
         router.push(`/documents/${documentId}`);

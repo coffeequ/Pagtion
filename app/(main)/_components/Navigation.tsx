@@ -114,6 +114,7 @@ export default function Navigation(){
     }
 
     function handleCreateNote() {
+
         const promise = create("Untitled", userId!).then((documentId) => router.push(`/documents/${documentId}`));
 
         toast.promise(promise, {
