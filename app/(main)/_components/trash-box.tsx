@@ -20,8 +20,6 @@ export default function TrashBox(){
 
     const params = useParams();
 
-    //const documents = trash;
-
     const myRestore = restore;
 
     const myRemove = remove
@@ -36,7 +34,6 @@ export default function TrashBox(){
             setDocuments(data);
         }
         fetchData();
-
     }, []);
 
     const filtredDocuments = documents.filter((document: Document) => {

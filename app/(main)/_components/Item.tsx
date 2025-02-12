@@ -47,12 +47,13 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
         event.stopPropagation();
         if(!id) return;
         const promise = createDocument("Untitled", user?.id!, id)
-            .then((documentId) => {
+            .then(() => {
             if(!expanded){
                 onExpand?.();
             }
-            router.push(`/documents/${documentId}`);
+            // router.push(`/documents/${documentId.id}`);
         });
+        debugger
         toast.promise(promise, {
             loading: "Создание новой заметки...",
             success: "Заметка была успешно создана",

@@ -11,6 +11,8 @@ import "@blocknote/mantine/style.css"
 import { useEdgeStore } from "@/lib/edgestore";
 
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+
 
 interface IEditorProps{
     onChange: (value: string) => void;
@@ -40,18 +42,6 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
 
     //Метод работает
    editor.onEditorContentChange(() => {onChange(JSON.stringify(editor.document, null, 2))});
-
-    // const uploadToDatabase = useCallback(
-    //     debounce(() => {
-    //         onChange(JSON.stringify(editor.document));
-    //     }, 300), // set any time you want
-    //     [editor, onChange]
-    // );
-    // const uploadToDataBase = () => {
-    //     if(onChange){
-    //         onChange(JSON.stringify(editor.document, null, 2));
-    //     }
-    // }
     
     return(
         <div>
@@ -63,3 +53,5 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
 }
 
 export default Editor;
+
+

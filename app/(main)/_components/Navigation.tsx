@@ -114,8 +114,10 @@ export default function Navigation(){
     }
 
     function handleCreateNote() {
-
-        const promise = create("Untitled", userId!).then((documentId) => router.push(`/documents/${documentId}`));
+        debugger
+        const promise = create("Untitled", userId!).then((documentId) => {
+            // router.push(`/documents/${documentId.id}`)
+        });
 
         toast.promise(promise, {
             loading: "Создание новой заметки...",

@@ -3,7 +3,7 @@
 import IconPicker from "./icon-picker";
 import { Button } from "@/components/ui/button";
 import { Flashlight, ImageIcon, Smile, X } from "lucide-react";
-import { ComponentRef, use, useRef, useState } from "react";
+import { ComponentRef, use, useEffect, useRef, useState } from "react";
 
 import TextareaAutosize from "react-textarea-autosize"
 import { useCoverImage } from "@/hooks/use-cover-image";
@@ -15,9 +15,10 @@ import removeIcon from "@/actions/removeIconDocument";
 interface IToolbarProps {
     initialData: Document
     preview?: boolean,
+    onTitleChange: (title: string) => Promise<void>;
 }
 
-export default function Toolbar({ initialData, preview } : IToolbarProps){
+export default function Toolbar({ initialData, preview, onTitleChange } : IToolbarProps){
 
     const inputRef = useRef<ComponentRef<"textarea">>(null);
 
@@ -34,7 +35,6 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
         setTimeout(() => {
             setValue(initialData.title);
             inputRef.current?.focus();
-            console.log("Метод сработал");
         }, 0);
     }
 
@@ -44,16 +44,23 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
 
     function onInput(value: string) {
         setValue(value);
-        update({
-            documentId: initialData.id,
-            title: value || "Untitled"
-        });
+        // update({
+        //     documentId: initialData.id,
+        //     title: value || "Untitled"
+        // });
     }
+
+    useEffect(() => {
+        if(value !== initialData.title){
+            onTitleChange(value);
+        }
+    }, [value]);
 
     function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>){
         if(event.key === "Enter"){
             event.preventDefault();
             disableInput();
+            console.log(value);
         }
     }
 
@@ -66,6 +73,9 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
 
     function onIconRemove(){
         removeIcon(initialData.id);
+        update({
+            documentId: initialData.id
+        });
     }
 
     return(

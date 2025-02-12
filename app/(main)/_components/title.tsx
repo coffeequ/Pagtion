@@ -17,8 +17,6 @@ export default function Title({initialData}: TitleProps){
 
     const inputRef = useRef<HTMLInputElement>(null); 
 
-    const myUpdate = update;
-
     const [title, setTitle] = useState(initialData.title || "Untitled");
 
     const [isEditing, setIsEditing] = useState(false);
@@ -39,7 +37,7 @@ export default function Title({initialData}: TitleProps){
 
     function onChange(event: React.ChangeEvent<HTMLInputElement>){
         setTitle(event.target.value);
-        myUpdate({
+        update({
             documentId: initialData.id,
             title: event.target.value || "Untitled",
         });

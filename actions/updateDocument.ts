@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { revalidatePath } from "next/cache";
 
 interface IUpdateProps {
     documentId: string,
@@ -37,6 +38,6 @@ export default async function update({ documentId, userId, title, content, cover
             isPublished
         }
     });
-
+    //revalidatePath(`/documents/${updateDocument.id}`);
     return updateDocument;
 }

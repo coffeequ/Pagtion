@@ -9,9 +9,7 @@ import { useUser } from "@clerk/clerk-react";
 export default function MainLayot({ children } : { children:React.ReactNode }){
 
     const {isSignedIn, isLoaded} = useUser();
-
-    //const {isAuthenticated, isLoading} = useConvexAuth();
-
+    
     if(!isLoaded){
         return (
           <div className="h-full flex items-center justify-center">

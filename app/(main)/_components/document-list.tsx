@@ -13,10 +13,9 @@ interface DocumentListProps{
     parentDocumentId?: string;
     level?: number;
     data?: Document[];
-    stateUpdate?: boolean,
 }
 
-export default function DocumentList({ parentDocumentId, level = 0, stateUpdate} : DocumentListProps) {
+export default function DocumentList({ parentDocumentId, level = 0} : DocumentListProps) {
 
     const params = useParams();
 
@@ -39,7 +38,7 @@ export default function DocumentList({ parentDocumentId, level = 0, stateUpdate}
             setDocuments(data);
         }
         fetchDocuments();
-    }, [stateUpdate]);
+    }, [parentDocumentId]);
 
     function onRedirect(documentId: string){
         router.push(`/documents/${documentId}`);

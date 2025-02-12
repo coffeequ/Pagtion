@@ -16,7 +16,7 @@ export default function DocumentPage(){
 
     function onCreate(){
         const promise = create("Untitled", user?.id!).then((documentId) => router.push(`/documents/${documentId.id}`));
-
+        
         toast.promise(promise, {
             loading: "Создание новой заметки...",
             success: "Новая заметка создана!",
