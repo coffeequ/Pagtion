@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 
-export default async function removeCoverImageDocument(documentId: string, userId: string){
+export default async function removeCoverImageDocument(documentId: string, userId?: string){
     const existingDocument = await prisma.document.findFirst({
         where: {
             id: documentId,
@@ -19,7 +19,7 @@ export default async function removeCoverImageDocument(documentId: string, userI
             id: existingDocument.id,
         },
         data: {
-            coverImage: undefined
+            coverImage: null
         }
     });
 

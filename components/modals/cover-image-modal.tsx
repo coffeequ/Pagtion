@@ -48,7 +48,7 @@ export default function CoverImageModal(){
                 documentId: params.documentId as string,
                 coverImage: res.url,
             });
-
+            
             onClose();
         }
     }

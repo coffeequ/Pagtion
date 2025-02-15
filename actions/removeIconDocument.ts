@@ -19,7 +19,7 @@ export default async function removeIcon(documentId: string, userId?: string){
             id: existingDocument.id
         },
         data: {
-            icon: undefined
+            icon: null
         }
     });
 

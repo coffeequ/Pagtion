@@ -16,9 +16,10 @@ import { useAuth } from "@clerk/clerk-react";
 interface ICoverProps {
     url?: string,
     preview?: boolean;
+    onCoverUpdate: () => void;
 }
 
-export default function Cover({ url, preview } : ICoverProps){
+export default function Cover({ url, preview, onCoverUpdate } : ICoverProps){
     
     const { edgestore } = useEdgeStore();
 
@@ -36,6 +37,7 @@ export default function Cover({ url, preview } : ICoverProps){
         }
 
         await removeCoverImageDocument(params.documentId as string, userId!);
+        onCoverUpdate();
     }
     
     return(
