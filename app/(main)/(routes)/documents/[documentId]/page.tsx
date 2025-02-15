@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import Toolbar from "@/components/toolbar";
 import Cover from "@/components/cover";
@@ -40,13 +40,20 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
         }).then((item) => setDocument(item));
     }
 
-    //Функция для сохранения content
-    function onChange(content: string) {
+    //Асинхронная функция для сохранения content
+    // function onChange(content: string) {
+    //     update({
+    //         documentId: params.documentId,
+    //         content
+    //     });
+    // }
+
+    const onChange = useCallback((content: string) => {
         update({
             documentId: params.documentId,
             content
-        })
-    }
+        });
+    }, [params.documentId])
 
     if(document === undefined){
         return(

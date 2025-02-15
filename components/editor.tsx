@@ -9,9 +9,11 @@ import { BlockNoteView } from "@blocknote/mantine"
 import "@blocknote/mantine/style.css"
 
 import { useEdgeStore } from "@/lib/edgestore";
-
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+//import { useDebounceCallback } from "usehooks-ts";
+import { useDebounceCallback } from "usehooks-ts";
+import { useEffect } from "react";
+import { throttle } from "lodash";
 
 
 interface IEditorProps{
@@ -25,6 +27,8 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
     const { resolvedTheme } = useTheme();
 
     const { edgestore } = useEdgeStore();
+
+    const debouncedOnChange = useDebounceCallback(onChange, 200);
 
     async function handleUpload(file: File){
         
@@ -40,8 +44,9 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
         uploadFile: handleUpload
     });
 
-    //Метод работает
-   editor.onEditorContentChange(() => {onChange(JSON.stringify(editor.document, null, 2))});
+   useEffect(() => {
+    editor.onEditorContentChange(() => {debouncedOnChange(JSON.stringify(editor.document, null, 2))});
+   }, [debouncedOnChange, editor]);
     
     return(
         <div>
