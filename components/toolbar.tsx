@@ -16,7 +16,6 @@ interface IToolbarProps {
     initialData: Document
     preview?: boolean,
     onTitleChange: (title: string) => Promise<void>;
-    onCoverUpdate: () => void;
 }
 
 export default function Toolbar({ initialData, preview, onTitleChange } : IToolbarProps){
@@ -110,10 +109,10 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
                 }
                 {
                     
-                    !initialData.coverImage && !preview && (
+                    !coverImage.url && !preview && (
                         <Button onClick={coverImage.onOpen} className="text-muted-foreground text-xs" variant="outline">
                             <ImageIcon className="h-4 w-4 mr-2"/>
-                            Добавить задний фон
+                            Добавить обложку
                         </Button>
                     )
                 }

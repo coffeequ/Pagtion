@@ -13,12 +13,13 @@ import { useParams } from "next/navigation";
 
 import update from "@/actions/updateDocument";
 
+
 export default function CoverImageModal(){
 
     const params = useParams();
 
     const coverImage = useCoverImage();
-    
+        
     const [file, setFile] = useState<File>();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,6 +34,7 @@ export default function CoverImageModal(){
 
     async function onChange(file?: File) {
         if(file){
+            debugger
             setIsSubmitting(true);
             setFile(file);
 
@@ -42,13 +44,13 @@ export default function CoverImageModal(){
                     replaceTargetUrl: coverImage.url
                 }
             });
-            
 
             update({
                 documentId: params.documentId as string,
                 coverImage: res.url,
             });
-            
+            coverImage.setCoverImage(res.url);
+            setTimeout(() => coverImage.setCoverImage(res.url), 100);
             onClose();
         }
     }
@@ -58,7 +60,7 @@ export default function CoverImageModal(){
             <DialogContent>
                 <DialogHeader>
                     <h2 className="text-center text-lg font-semibold">
-                        Изображение фона
+                        Изображение
                     </h2>
                 </DialogHeader>
                 <SingleImageDropzone className="w-full outline-none" disabled = {isSubmitting} value={file} onChange={onChange} />

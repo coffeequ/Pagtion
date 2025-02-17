@@ -10,6 +10,7 @@ import update from "@/actions/updateDocument";
 import getId from "@/actions/idDocument";
 import { useAuth } from "@clerk/clerk-react";
 import { Document } from "@prisma/client";
+import { useCoverImage } from "@/hooks/use-cover-image";
 
 interface IDocumentIdPageProps{
     params: {
@@ -21,19 +22,24 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
 
     const Editor = useMemo(() => dynamic(() => import("@/components/editor"), { ssr: false }), []);
 
-    const { userId } = useAuth();
+    const { url, setCoverImage } = useCoverImage();
+
+    const { userId } = useAuth(); 
 
     const [document, setDocument] = useState<Document>();
-
-    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         async function fetchDocument(){
             const document = await getId(params.documentId, userId!);
             setDocument(document);
+
+            if(document.coverImage){
+                console.log(document.coverImage);
+                setCoverImage(document.coverImage);
+            }
         }
         fetchDocument();
-    }, [refresh]);
+    }, []);
 
     async function onTitleUpdate(title: string){
         await update({
@@ -75,9 +81,9 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
     
     return(
         <div className="pb-40">
-            <Cover url = {document.coverImage as string | undefined} onCoverUpdate={() => setRefresh((prev) => !prev)} />
+            <Cover key={url} url={url} />
             <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-                <Toolbar initialData = { document } onTitleChange={onTitleUpdate} onCoverUpdate={() => setRefresh((prev) => !prev)} />
+                <Toolbar initialData = { document } onTitleChange={onTitleUpdate} />
                 <Editor onChange = {onChange} initialContent = { document.content } />
             </div>
         </div> 

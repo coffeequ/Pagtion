@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -8,6 +7,8 @@ import ModalProvider from "@/components/providers/modal-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
+
+import { useState } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

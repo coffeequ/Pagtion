@@ -2,6 +2,7 @@
 
 import{
     BlockNoteEditor,
+    locales,
     PartialBlock,
 } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react"
@@ -41,7 +42,8 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
 
     const editor: BlockNoteEditor = useCreateBlockNote({
         initialContent: initialContent ? JSON.parse(initialContent) as PartialBlock[] : undefined,
-        uploadFile: handleUpload
+        uploadFile: handleUpload,
+        dictionary: locales.ru
     });
 
    useEffect(() => {

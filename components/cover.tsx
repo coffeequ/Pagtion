@@ -16,10 +16,9 @@ import { useAuth } from "@clerk/clerk-react";
 interface ICoverProps {
     url?: string,
     preview?: boolean;
-    onCoverUpdate: () => void;
 }
 
-export default function Cover({ url, preview, onCoverUpdate } : ICoverProps){
+export default function Cover({ preview, url } : ICoverProps){
     
     const { edgestore } = useEdgeStore();
 
@@ -27,17 +26,19 @@ export default function Cover({ url, preview, onCoverUpdate } : ICoverProps){
 
     const params = useParams();
 
-    const coverImage = useCoverImage();
+    const {setCoverImage, onReplace} = useCoverImage();
+
+    console.log(url);
 
     async function onRemove () {
         if(url){
             await edgestore.publicFiles.delete({
-                url: url
+                url
             });
         }
 
         await removeCoverImageDocument(params.documentId as string, userId!);
-        onCoverUpdate();
+        setCoverImage("");
     }
     
     return(
@@ -53,7 +54,7 @@ export default function Cover({ url, preview, onCoverUpdate } : ICoverProps){
             {
                 url && !preview && (
                     <div className="opacity-0 group-hover:opacity-100 absolute bottom-5 right-5 flex items-center gap-x-2">
-                        <Button onClick={() => coverImage.onReplace(url)} className="text-muted-foreground text-xs" variant="outline">
+                        <Button onClick={() => onReplace(url as string)} className="text-muted-foreground text-xs" variant="outline">
                             <ImageIcon className="h-4 w-4 mr-4"/>
                             Поменять фон
                         </Button>
