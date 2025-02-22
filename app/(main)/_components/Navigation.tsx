@@ -20,6 +20,7 @@ import { createDocument } from "@/actions/createDocument";
 import { useAuth } from "@clerk/clerk-react";
 
 export default function Navigation(){
+    
     const router = useRouter();
     const settings = useSettings();
     const search = useSearch();
@@ -27,8 +28,6 @@ export default function Navigation(){
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px)");
     const { userId } = useAuth();
-
-    const create = createDocument;
 
     const isResizingRef = useRef(false);
     const sidebarRef = useRef<ComponentRef<"aside">>(null);
@@ -114,9 +113,8 @@ export default function Navigation(){
     }
 
     function handleCreateNote() {
-        debugger
-        const promise = create("Untitled", userId!).then((documentId) => {
-            // router.push(`/documents/${documentId.id}`)
+        const promise = createDocument("Untitled", userId!).then((documentId) => {
+            router.push(`/documents/${documentId.id}`)
         });
 
         toast.promise(promise, {

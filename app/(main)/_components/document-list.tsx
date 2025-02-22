@@ -12,7 +12,6 @@ import sidebar from "@/actions/sidebarDocument";
 interface DocumentListProps{
     parentDocumentId?: string;
     level?: number;
-    data?: Document[];
 }
 
 export default function DocumentList({ parentDocumentId, level = 0} : DocumentListProps) {
@@ -34,7 +33,7 @@ export default function DocumentList({ parentDocumentId, level = 0} : DocumentLi
 
     useEffect(() => {
         const fetchDocuments = async () => {
-            const data = await sidebar(parentDocumentId as string);
+            const data = await sidebar(parentDocumentId);
             setDocuments(data);
         }
         fetchDocuments();
@@ -81,7 +80,8 @@ export default function DocumentList({ parentDocumentId, level = 0} : DocumentLi
                         expanded = {expanded[document.id]}
                         />
                         {
-                            expanded[document.id] && (
+                            
+                            expanded[document.id as string] && (
                                 <DocumentList
                                     parentDocumentId={document.id}
                                     level={level + 1}

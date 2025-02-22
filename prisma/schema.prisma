@@ -12,7 +12,7 @@ model Document {
   userId           String
   title            String
   isArchived       Boolean     @default(false)
-  parentDocumentId String?
+  parentDocumentId String?     
   content          String?
   coverImage       String?
   icon             String?

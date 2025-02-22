@@ -34,12 +34,14 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
             setDocument(document);
 
             if(document.coverImage){
-                console.log(document.coverImage);
                 setCoverImage(document.coverImage);
+            }
+            else{
+                setCoverImage("");
             }
         }
         fetchDocument();
-    }, []);
+    }, [params.documentId]);
 
     async function onTitleUpdate(title: string){
         await update({

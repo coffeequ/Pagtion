@@ -5,7 +5,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react";
+import Document from "next/document";
 import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 
 interface ItemProps {
@@ -21,7 +23,7 @@ interface ItemProps {
     icon: LucideIcon;
 }
 
-export default function Item( {id, label, onClick, icon:Icon, active, expanded, onExpand, level = 0, documentIcon, isSearch }: ItemProps ){
+export default function Item( {id, label, onClick, icon:Icon, active, expanded, onExpand, level = 0, documentIcon, isSearch}: ItemProps ){
     
     const { user } = useUser();
 
@@ -47,13 +49,14 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
         event.stopPropagation();
         if(!id) return;
         const promise = createDocument("Untitled", user?.id!, id)
-            .then(() => {
+            .then((document) => {
             if(!expanded){
                 onExpand?.();
             }
-            // router.push(`/documents/${documentId.id}`);
+            router.push(`/documents/${document.id}`);
+            router.refresh();
         });
-        debugger
+
         toast.promise(promise, {
             loading: "Создание новой заметки...",
             success: "Заметка была успешно создана",
