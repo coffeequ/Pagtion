@@ -11,6 +11,7 @@ import getId from "@/actions/idDocument";
 import { useAuth } from "@clerk/clerk-react";
 import { Document } from "@prisma/client";
 import { useCoverImage } from "@/hooks/use-cover-image";
+import useRefreshStore from "@/hooks/use-refresh";
 
 interface IDocumentIdPageProps{
     params: {
@@ -21,6 +22,8 @@ interface IDocumentIdPageProps{
 export default function DocumentIdPage({params} : IDocumentIdPageProps){
 
     const Editor = useMemo(() => dynamic(() => import("@/components/editor"), { ssr: false }), []);
+
+    const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
 
     const { url, setCoverImage } = useCoverImage();
 
@@ -43,19 +46,15 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
         fetchDocument();
     }, [params.documentId]);
 
-    // async function onTitleUpdate(title: string){
-    //     await update({
-    //         documentId: params.documentId,
-    //         title,
-    //     }).then((item) => setDocument(item));
-    // }
-
     const onChangeTitle = useCallback((title: string) => {
-        console.log(title);
+        if(title === ""){
+            title = "Untitled";
+        }
         update({
             documentId: params.documentId,
             title
         });
+        triggerRefresh();
     }, [params.documentId]);
 
     const onChangeContent = useCallback((content: string) => {

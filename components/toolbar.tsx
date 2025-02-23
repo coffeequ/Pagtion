@@ -12,6 +12,7 @@ import { Document } from "@prisma/client";
 import update from "@/actions/updateDocument";
 import removeIcon from "@/actions/removeIconDocument";
 import { useDebounceCallback } from "usehooks-ts";
+import useRefreshStore from "@/hooks/use-refresh";
 
 interface IToolbarProps {
     initialData: Document
@@ -31,11 +32,12 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
 
     const debounceTitleChange = useDebounceCallback(onTitleChange, 200);
 
+    const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
+
     const coverImage = useCoverImage();
 
     function enableInput() {
         if(preview) return;
-
         setIsEditing(true);
         setTimeout(() => {
             setValue(value);
@@ -45,6 +47,7 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
 
     function disableInput(){
         setIsEditing(false);
+        debounceTitleChange(value);
     }
 
     function onInput(value: string) {
@@ -64,10 +67,12 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
             documentId: initialData.id,
             icon
         }).then((item) => setIcon(item.icon));
+        triggerRefresh();
     }
 
     function onIconRemove(){
         removeIcon(initialData.id).then(() => setIcon(null));
+        triggerRefresh();
     }
 
     return(
@@ -125,8 +130,14 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
                         className="text-5xl bg-transparent font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF] resize-none"
                     />
                 ): (
-                    <div onClick={enableInput} className="pb-[11.5px] text-5xl font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF]">
-                        {value}
+                    <div onClick={enableInput} aria-placeholder="Untitled" className="pb-[11.5px] text-5xl font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF]">
+                        {
+                            value && (
+                                <p>{value}</p>
+                            ) || (
+                                <p>Untitled</p>
+                            )
+                        }
                     </div>
                 )
             }
