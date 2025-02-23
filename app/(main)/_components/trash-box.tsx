@@ -49,6 +49,7 @@ export default function TrashBox(){
     }
 
     function onRestore(event: React.MouseEvent<HTMLDivElement, MouseEvent>, documentId: string){
+        debugger
         event.stopPropagation();
 
         const promise = restore(documentId, userId as string);
