@@ -1,13 +1,14 @@
 "use client"
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState, cache } from "react";
+import { useEffect, useState, cache, use } from "react";
 import Item from "./Item";
 import { cn } from "@/lib/utils";
 import { FileIcon } from "lucide-react";
 import { Document } from "@prisma/client";
 
 import sidebar from "@/actions/sidebarDocument";
+import useRefreshStore from "@/hooks/use-refresh";
 
 interface DocumentListProps{
     parentDocumentId?: string;
@@ -15,6 +16,8 @@ interface DocumentListProps{
 }
 
 export default function DocumentList({ parentDocumentId, level = 0} : DocumentListProps) {
+
+    const shouldRefresh = useRefreshStore((state) => state.shouldRefresh);
 
     const params = useParams();
 
@@ -31,13 +34,18 @@ export default function DocumentList({ parentDocumentId, level = 0} : DocumentLi
         }));
     }
 
+    const fetchDocuments = async () => {
+        const data = await sidebar(parentDocumentId);
+        setDocuments(data);
+    }
+
     useEffect(() => {
-        const fetchDocuments = async () => {
-            const data = await sidebar(parentDocumentId);
-            setDocuments(data);
-        }
         fetchDocuments();
-    }, [parentDocumentId]);
+    }, [parentDocumentId, shouldRefresh]);
+
+    function refreshDocuments(){
+        fetchDocuments();
+    } 
 
     function onRedirect(documentId: string){
         router.push(`/documents/${documentId}`);
@@ -78,6 +86,7 @@ export default function DocumentList({ parentDocumentId, level = 0} : DocumentLi
                         level = {level}
                         onExpand={() => onExpand(document.id)}
                         expanded = {expanded[document.id]}
+                        refreshDocuments={refreshDocuments}
                         />
                         {
                             

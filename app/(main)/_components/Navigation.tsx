@@ -18,9 +18,15 @@ import Navbar from "./navbar";
 
 import { createDocument } from "@/actions/createDocument";
 import { useAuth } from "@clerk/clerk-react";
+import { Document } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import sidebar from "@/actions/sidebarDocument";
+import useRefreshStore from "@/hooks/use-refresh";
 
 export default function Navigation(){
-    
+
+    const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
+
     const router = useRouter();
     const settings = useSettings();
     const search = useSearch();
@@ -114,7 +120,8 @@ export default function Navigation(){
 
     function handleCreateNote() {
         const promise = createDocument("Untitled", userId!).then((documentId) => {
-            router.push(`/documents/${documentId.id}`)
+            router.push(`/documents/${documentId.id}`);
+            triggerRefresh();
         });
 
         toast.promise(promise, {

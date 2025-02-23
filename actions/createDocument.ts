@@ -13,6 +13,6 @@ export async function createDocument(title: string, userId: string, parentDocume
             isPublished: false
         }
     });
-    revalidatePath(`/documents/${document.id}`);
+    revalidatePath(`/`);
     return document;
 }

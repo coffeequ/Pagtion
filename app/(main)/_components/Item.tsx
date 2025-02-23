@@ -2,12 +2,12 @@ import { archived } from "@/actions/ArchiveDocument";
 import { createDocument } from "@/actions/createDocument";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import useRefreshStore from "@/hooks/use-refresh";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
+import { Document } from "@prisma/client";
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react";
-import Document from "next/document";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 
 interface ItemProps {
@@ -21,10 +21,13 @@ interface ItemProps {
     label: string;
     onClick?: () => void;
     icon: LucideIcon;
+    refreshDocuments?: () => void;
 }
 
-export default function Item( {id, label, onClick, icon:Icon, active, expanded, onExpand, level = 0, documentIcon, isSearch}: ItemProps ){
+export default function Item( {id, label, onClick, icon:Icon, active, expanded, onExpand, level = 0, documentIcon, isSearch, refreshDocuments}: ItemProps ){
     
+    const shouldRefresh = useRefreshStore((state) => state.triggerRefresh);
+
     const { user } = useUser();
 
     const router = useRouter();
@@ -32,7 +35,10 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
     const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
         if(!id) return;
-        const promise = archived(id, user?.id!).then(() => router.push(`/documents`));
+        const promise = archived(id, user?.id!).then(() => {
+            router.push(`/documents`);
+            refreshDocuments?.();
+        });
         toast.promise(promise, {
             loading: "Перемещение в мусорку...",
             success: "Удаление произошло успешно!",
@@ -50,11 +56,13 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
         if(!id) return;
         const promise = createDocument("Untitled", user?.id!, id)
             .then((document) => {
-            if(!expanded){
-                onExpand?.();
-            }
+                if(!expanded){
+                    onExpand?.();
+                }
+                else{
+                    shouldRefresh();
+                }
             router.push(`/documents/${document.id}`);
-            router.refresh();
         });
 
         toast.promise(promise, {
@@ -62,6 +70,7 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
             success: "Заметка была успешно создана",
             error: "Ошибка создании заметки"
         });
+
     }
 
     const ChevronIcon = expanded ? ChevronDown : ChevronRight;
