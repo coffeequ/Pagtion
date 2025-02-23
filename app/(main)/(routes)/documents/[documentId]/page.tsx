@@ -43,14 +43,22 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
         fetchDocument();
     }, [params.documentId]);
 
-    async function onTitleUpdate(title: string){
-        await update({
-            documentId: params.documentId,
-            title,
-        }).then((item) => setDocument(item));
-    }
+    // async function onTitleUpdate(title: string){
+    //     await update({
+    //         documentId: params.documentId,
+    //         title,
+    //     }).then((item) => setDocument(item));
+    // }
 
-    const onChange = useCallback((content: string) => {
+    const onChangeTitle = useCallback((title: string) => {
+        console.log(title);
+        update({
+            documentId: params.documentId,
+            title
+        });
+    }, [params.documentId]);
+
+    const onChangeContent = useCallback((content: string) => {
         update({
             documentId: params.documentId,
             content
@@ -85,8 +93,8 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
         <div className="pb-40">
             <Cover key={url} url={url} />
             <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-                <Toolbar initialData = { document } onTitleChange={onTitleUpdate} />
-                <Editor onChange = {onChange} initialContent = { document.content } />
+                <Toolbar initialData = { document } onTitleChange={onChangeTitle} />
+                <Editor onChange = {onChangeContent} initialContent = { document.content } />
             </div>
         </div> 
     );

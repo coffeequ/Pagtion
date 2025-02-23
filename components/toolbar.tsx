@@ -11,11 +11,12 @@ import { Document } from "@prisma/client";
 
 import update from "@/actions/updateDocument";
 import removeIcon from "@/actions/removeIconDocument";
+import { useDebounceCallback } from "usehooks-ts";
 
 interface IToolbarProps {
     initialData: Document
     preview?: boolean,
-    onTitleChange: (title: string) => Promise<void>;
+    onTitleChange: (title: string) => void;
 }
 
 export default function Toolbar({ initialData, preview, onTitleChange } : IToolbarProps){
@@ -28,6 +29,8 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
 
     const [value, setValue] = useState(initialData.title);
 
+    const debounceTitleChange = useDebounceCallback(onTitleChange, 200);
+
     const coverImage = useCoverImage();
 
     function enableInput() {
@@ -35,7 +38,7 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
 
         setIsEditing(true);
         setTimeout(() => {
-            setValue(initialData.title);
+            setValue(value);
             inputRef.current?.focus();
         }, 0);
     }
@@ -46,19 +49,13 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
 
     function onInput(value: string) {
         setValue(value);
+        debounceTitleChange(value);
     }
-
-    useEffect(() => {
-        if(value !== initialData.title){
-            onTitleChange(value);
-        }
-    }, [value]);
 
     function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>){
         if(event.key === "Enter"){
             event.preventDefault();
             disableInput();
-            console.log(value);
         }
     }
 
@@ -129,7 +126,7 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
                     />
                 ): (
                     <div onClick={enableInput} className="pb-[11.5px] text-5xl font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF]">
-                        {initialData.title}
+                        {value}
                     </div>
                 )
             }

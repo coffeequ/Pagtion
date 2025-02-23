@@ -13,28 +13,32 @@ import trash from "@/actions/trashDocument";
 import restore from "@/actions/restoreDocument";
 import remove from "@/actions/removeDocument";
 import { Document } from "@prisma/client";
+import { useAuth } from "@clerk/clerk-react";
+import useRefreshStore from "@/hooks/use-refresh";
 
 export default function TrashBox(){
 
     const router = useRouter();
 
+    const {userId} = useAuth();
+
     const params = useParams();
-
-    const myRestore = restore;
-
-    const myRemove = remove
 
     const [search, setSearch] = useState("");
 
     const [documents, setDocuments] = useState<Document[]>([]);
 
+    const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
+
+    const [updateTrash, setUpdateTrash] = useState(false);
+
     useEffect(() => {
-        const fetchData = async() => {
-            const data = await trash();
+        const fetchData = async () => {
+            const data = await trash(userId as string);
             setDocuments(data);
         }
         fetchData();
-    }, []);
+    }, [updateTrash]);
 
     const filtredDocuments = documents.filter((document: Document) => {
         return document.title.toLowerCase().includes(search.toLowerCase());
@@ -47,25 +51,27 @@ export default function TrashBox(){
     function onRestore(event: React.MouseEvent<HTMLDivElement, MouseEvent>, documentId: string){
         event.stopPropagation();
 
-        const promise = myRestore(documentId);
+        const promise = restore(documentId, userId as string);
 
         toast.promise(promise, {
             loading: "Восстановление заметки...",
             success: "Заметка была успешно восстановлена!",
             error: "Ошибка восставновление заметки"
         });
+        triggerRefresh();
+        setUpdateTrash((prev) => !prev);
     }
 
 
     function onRemove(documentId: string){
-        const promise = myRemove(documentId);
+        const promise = remove(documentId);
 
         toast.promise(promise, {
             loading: "Удаление заметки...",
             success: "Удаление произошло успешно!",
             error: "Ошибка удаления заметки"
         });
-
+        setUpdateTrash((prev) => !prev);
         if(params.documentId === documentId){
             router.push("/documents")
         }
