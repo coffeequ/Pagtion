@@ -34,7 +34,7 @@ export default function IconPicker({ onChange, children, asChild } : IIconPicker
             <PopoverTrigger asChild = {asChild}>
                 {children}
             </PopoverTrigger>
-            <PopoverContent className="p-0 w-full border-none shadow-none">
+            <PopoverContent className="z-[99] p-0 w-full border-none shadow-none">
                 <EmojiPicker 
                     height={350}
                     theme={theme}

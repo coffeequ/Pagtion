@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import Toolbar from "@/components/toolbar";
 import Cover from "@/components/cover";
@@ -12,6 +12,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { Document } from "@prisma/client";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";
+import { useParams } from "next/navigation";
 
 interface IDocumentIdPageProps{
     params: {
@@ -26,6 +27,8 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
     const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
 
     const { url, setCoverImage } = useCoverImage();
+
+    const test = useParams();
 
     const { userId } = useAuth(); 
 
@@ -44,7 +47,7 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
             }
         }
         fetchDocument();
-    }, [params.documentId]);
+    }, [test.documentId]);
 
     const onChangeTitle = useCallback((title: string) => {
         if(title === ""){
