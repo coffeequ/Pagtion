@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useState } from "react";
 
 import Toolbar from "@/components/toolbar";
 import Cover from "@/components/cover";
@@ -14,13 +14,11 @@ import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";
 import { useParams } from "next/navigation";
 
-interface IDocumentIdPageProps{
-    params: {
-        documentId: string
-    };
-};
 
-export default function DocumentIdPage({params} : IDocumentIdPageProps){
+
+export default function DocumentIdPage(){
+
+    const { documentId } = useParams();
 
     const Editor = useMemo(() => dynamic(() => import("@/components/editor"), { ssr: false }), []);
 
@@ -28,15 +26,13 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
 
     const { url, setCoverImage } = useCoverImage();
 
-    const test = useParams();
-
     const { userId } = useAuth(); 
 
     const [document, setDocument] = useState<Document>();
 
     useEffect(() => {
         async function fetchDocument(){
-            const document = await getId(params.documentId, userId!);
+            const document = await getId(documentId as string, userId!);
             setDocument(document);
 
             if(document.coverImage){
@@ -47,25 +43,25 @@ export default function DocumentIdPage({params} : IDocumentIdPageProps){
             }
         }
         fetchDocument();
-    }, [test.documentId]);
+    }, [documentId as string]);
 
     const onChangeTitle = useCallback((title: string) => {
         if(title === ""){
             title = "Untitled";
         }
         update({
-            documentId: params.documentId,
+            documentId: documentId as string,
             title
         });
         triggerRefresh();
-    }, [params.documentId]);
+    }, [documentId as string]);
 
     const onChangeContent = useCallback((content: string) => {
         update({
-            documentId: params.documentId,
+            documentId: documentId as string,
             content
         });
-    }, [params.documentId])
+    }, [documentId as string])
 
     if(document === undefined){
         return(
