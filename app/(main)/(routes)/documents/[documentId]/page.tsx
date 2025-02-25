@@ -14,8 +14,6 @@ import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";
 import { useParams } from "next/navigation";
 
-
-
 export default function DocumentIdPage(){
 
     const { documentId } = useParams();
@@ -41,6 +39,7 @@ export default function DocumentIdPage(){
             else{
                 setCoverImage("");
             }
+            console.log(document);
         }
         fetchDocument();
     }, [documentId as string]);

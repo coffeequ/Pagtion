@@ -22,17 +22,23 @@ export default function Navbar({ isCollapsed, onResetWidth } : NavbarProps) {
     
     const [document, setDocuments] = useState<Document>();
 
+    const [isRefresh, setIsRefresh] = useState(false);
+
     const { userId } = useAuth();
 
-    const params = useParams();
+    const { documentId } = useParams();
 
     useEffect(() => {
         const fetchDocuments = async () => {
-            const data = await getId(params.documentId as string, userId!);
+            const data = await getId(documentId as string, userId!);
             setDocuments(data); 
         }
         fetchDocuments();
-    }, []);
+    }, [isRefresh, documentId]);
+
+    function refresh() {
+        setIsRefresh((prev) => !prev);
+    }
 
     if(document === undefined){
         return (
@@ -60,7 +66,7 @@ export default function Navbar({ isCollapsed, onResetWidth } : NavbarProps) {
                 <div className="flex items-center justify-between w-full">
                     <Title initialData = {document}/>
                     <div className="flex items-center gap-x-2">
-                        <Publish initialData = {document} />
+                        <Publish initialData = {document} refresh={refresh} />
                         <Menu documentId = {document.id} />
                     </div>
                 </div>

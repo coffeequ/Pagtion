@@ -16,13 +16,13 @@ import { Document } from "@prisma/client";
 import update from "@/actions/updateDocument";
 
 interface IPublishProps {
-    initialData: Document
+    initialData: Document;
+    refresh: () => void;
 }
 
-export default function Publish({ initialData } : IPublishProps) {
-    const origin = useOrigin();
+export default function Publish({ initialData, refresh } : IPublishProps) {
 
-    const myUpdate = update;
+    const origin = useOrigin();
 
     const [copied, setCopied] = useState(false);
 
@@ -31,12 +31,17 @@ export default function Publish({ initialData } : IPublishProps) {
     const url = `${origin}/preview/${initialData.id}`;
 
     function onPublished() {
+
         setIsSubmitting(true);
         
-        const promise = myUpdate({
+        const promise = update({
             documentId: initialData.id,
             isPublished: true,
-        }).finally(() => setIsSubmitting(false));
+        }).finally(() => {
+            setIsSubmitting(false);
+            refresh();
+        });
+
         toast.promise(promise, {
             loading: "Публикация...",
             success: "Опубликованно!",
@@ -50,7 +55,10 @@ export default function Publish({ initialData } : IPublishProps) {
         const promise = update({
             documentId: initialData.id,
             isPublished: false,
-        }).finally(() => setIsSubmitting(false));
+        }).finally(() => {
+            setIsSubmitting(false);
+            refresh();
+        });
         toast.promise(promise, {
             loading: "Отмена публикации...",
             success: "Заметка была снята с публикации!",
@@ -86,7 +94,7 @@ export default function Publish({ initialData } : IPublishProps) {
                                 <div className="flex items-center gap-x-2">
                                     <Globe className="text-sky-500 animate-pulse h-4 w-4" />
                                     <p className="text-xs font-medium text-sky-500">
-                                        Заметка транслируется в интернете.
+                                        Заметка транслируется в интернете
                                     </p>
                                 </div>
                                 <div className="flex items-center">

@@ -7,22 +7,23 @@ import { toast } from "sonner";
 
 import remove from "@/actions/removeDocument";
 import restore from "@/actions/restoreDocument";
+import { useAuth } from "@clerk/clerk-react";
+import useRefreshStore from "@/hooks/use-refresh";
 
 interface IBannerProps{
     documentId: string
 }
 
-
 export default function Banner({documentId}: IBannerProps){
 
     const router = useRouter();
 
-    const myRemove = remove;
+    const {userId} = useAuth();
 
-    const myRestore = restore;
+    const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
 
     function onRemove(){
-        const promise = myRemove(documentId);
+        const promise = remove(documentId);
 
         toast.promise(promise, {
             loading: "Удаление заметки...",
@@ -34,20 +35,25 @@ export default function Banner({documentId}: IBannerProps){
     }
 
     function onRestore(){
-        const promise = myRestore(documentId);
+
+        const promise = restore(documentId, userId as string);
 
         toast.promise(promise, {
             loading: "Восстановление заметки...",
             success: "Восстановление произошло успешно!",
             error: "Произошла ошибка при восстановлении."
         });
+
+        triggerRefresh();
+        
+        router.push("/documents");
     }
 
     return(
         <>
             <div className="w-full bg-rose-500 text-center text-sm p-2 text-white flex items-center gap-x-2 justify-center">
                 <p>
-                    Эта страница находится в корзине.
+                    Страница находится в корзине.
                 </p>
                 <Button onClick={onRestore} variant="outline" className="border-white bg-transparent hover:bg-primary/5 text-white hover:text-white p-1 px-2 h-auto font-normal">
                     Восстановить страницу
