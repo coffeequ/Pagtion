@@ -5,7 +5,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import useRefreshStore from "@/hooks/use-refresh";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
-import { Document } from "@prisma/client";
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -35,7 +34,7 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
     const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
         if(!id) return;
-        const promise = archived(id, user?.id!).then(() => {
+        const promise = archived(id, user?.id).then(() => {
             router.push(`/documents`);
             refreshDocuments?.();
         });
@@ -53,8 +52,8 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
 
     function onCreate(event: React.MouseEvent<HTMLDivElement, MouseEvent>){
         event.stopPropagation();
-        if(!id) return;
-        const promise = createDocument("Untitled", user?.id!, id)
+        if(!id || !user?.id) return;
+        const promise = createDocument("Untitled", user?.id, id)
             .then((document) => {
                 if(!expanded){
                     onExpand?.();

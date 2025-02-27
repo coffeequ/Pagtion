@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { use, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import Toolbar from "@/components/toolbar";
 import Cover from "@/components/cover";

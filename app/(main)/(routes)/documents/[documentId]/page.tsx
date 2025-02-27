@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { use, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import Toolbar from "@/components/toolbar";
 import Cover from "@/components/cover";
@@ -12,7 +12,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { Document } from "@prisma/client";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 
 export default function DocumentIdPage(){
 
@@ -39,7 +39,13 @@ export default function DocumentIdPage(){
             else{
                 setCoverImage("");
             }
-            console.log(document);
+        }
+        if(!userId){
+            redirect("/documents");
+        }
+    
+        if(!documentId){
+            redirect("/documents");
         }
         fetchDocument();
     }, [documentId as string]);

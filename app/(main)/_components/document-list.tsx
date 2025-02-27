@@ -1,7 +1,7 @@
 "use client"
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState, cache, use } from "react";
+import { useEffect, useState } from "react";
 import Item from "./Item";
 import { cn } from "@/lib/utils";
 import { FileIcon } from "lucide-react";

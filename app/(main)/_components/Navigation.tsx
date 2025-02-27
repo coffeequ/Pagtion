@@ -18,9 +18,6 @@ import Navbar from "./navbar";
 
 import { createDocument } from "@/actions/createDocument";
 import { useAuth } from "@clerk/clerk-react";
-import { Document } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
-import sidebar from "@/actions/sidebarDocument";
 import useRefreshStore from "@/hooks/use-refresh";
 
 export default function Navigation(){

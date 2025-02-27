@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Inter } from "next/font/google";
 import { Manrope } from "next/font/google";
 import logoppl from "@/public/ppl-full-logo.svg"
 

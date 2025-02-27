@@ -5,7 +5,7 @@ import { useUser } from "@clerk/clerk-react";
 
 import { PlusCircle } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 import { createDocument } from "@/actions/createDocument";
 
@@ -14,8 +14,12 @@ export default function DocumentPage(){
     const { user } = useUser();
     const create = createDocument;
 
+    if(!user?.id){
+        redirect("/documents");
+    }
+
     function onCreate(){
-        const promise = create("Untitled", user?.id!).then((documentId) => router.push(`/documents/${documentId.id}`));
+        const promise = create("Untitled", user!.id).then((documentId) => router.push(`/documents/${documentId.id}`));
         
         toast.promise(promise, {
             loading: "Создание новой заметки...",

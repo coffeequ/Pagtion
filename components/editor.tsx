@@ -14,7 +14,6 @@ import { useTheme } from "next-themes";
 //import { useDebounceCallback } from "usehooks-ts";
 import { useDebounceCallback } from "usehooks-ts";
 import { useEffect } from "react";
-import { throttle } from "lodash";
 
 
 interface IEditorProps{

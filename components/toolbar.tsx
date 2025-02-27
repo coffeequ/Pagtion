@@ -2,8 +2,8 @@
 
 import IconPicker from "./icon-picker";
 import { Button } from "@/components/ui/button";
-import { Flashlight, ImageIcon, Smile, X } from "lucide-react";
-import { ComponentRef, useEffect, useRef, useState } from "react";
+import { ImageIcon, Smile, X } from "lucide-react";
+import { ComponentRef, useRef, useState } from "react";
 
 import TextareaAutosize from "react-textarea-autosize"
 import { useCoverImage } from "@/hooks/use-cover-image";

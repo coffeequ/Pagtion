@@ -4,7 +4,6 @@ import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SignInButton, useAuth } from "@clerk/clerk-react";
-import { auth } from '@clerk/nextjs/server'
 import { ArrowRight } from "lucide-react";
 import { Inter } from "next/font/google";
 import Link from "next/link";
