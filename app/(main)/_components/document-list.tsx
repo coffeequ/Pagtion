@@ -9,6 +9,7 @@ import { Document } from "@prisma/client";
 
 import sidebar from "@/actions/sidebarDocument";
 import useRefreshStore from "@/hooks/use-refresh";
+import { useAuth } from "@clerk/clerk-react";
 
 interface DocumentListProps{
     parentDocumentId?: string;
@@ -18,6 +19,8 @@ interface DocumentListProps{
 export default function DocumentList({ parentDocumentId, level = 0} : DocumentListProps) {
 
     const shouldRefresh = useRefreshStore((state) => state.shouldRefresh);
+
+    const { userId } = useAuth();
 
     const params = useParams();
 
@@ -35,7 +38,10 @@ export default function DocumentList({ parentDocumentId, level = 0} : DocumentLi
     }
 
     const fetchDocuments = async () => {
-        const data = await sidebar(parentDocumentId);
+        if(!userId){
+            throw new Error("Пользователь не был найден!");
+        }
+        const data = await sidebar(userId, parentDocumentId);
         setDocuments(data);
     }
 
