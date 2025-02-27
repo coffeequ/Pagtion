@@ -23,7 +23,7 @@ async function recursiveRestore(documentId: string) {
     }
 }
 
-export default async function restore(documentId: string, userId?: string) {
+export default async function restore(documentId: string, userId: string) {
     const existingDocument = await prisma.document.findFirst({
         where: {
             id: documentId,

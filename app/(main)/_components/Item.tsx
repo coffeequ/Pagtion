@@ -33,7 +33,7 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
 
     const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
-        if(!id) return;
+        if(!id || !user?.id) return;
         const promise = archived(id, user?.id).then(() => {
             router.push(`/documents`);
             refreshDocuments?.();

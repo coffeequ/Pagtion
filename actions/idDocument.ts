@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 
-export default async function getId(documentId: string, userId?: string) {
+export default async function getId(documentId: string, userId: string) {
     const existingDocument = await prisma.document.findFirst({
         where:{
             id: documentId,
