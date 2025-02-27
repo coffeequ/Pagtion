@@ -1,25 +1,29 @@
 "use client"
 
-import { api } from "@/convex/_generated/api";
-import { Doc, Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Item from "./Item";
 import { cn } from "@/lib/utils";
 import { FileIcon } from "lucide-react";
+import { Document } from "@prisma/client";
+
+import sidebar from "@/actions/sidebarDocument";
+import useRefreshStore from "@/hooks/use-refresh";
 
 interface DocumentListProps{
-    parentDocumentId?: Id<"documents">;
+    parentDocumentId?: string;
     level?: number;
-    data?: Doc<"documents">[];
 }
 
-export default function DocumentList({ parentDocumentId, level = 0 } : DocumentListProps) {
+export default function DocumentList({ parentDocumentId, level = 0} : DocumentListProps) {
+
+    const shouldRefresh = useRefreshStore((state) => state.shouldRefresh);
 
     const params = useParams();
 
     const router = useRouter();
+
+    const [documents, setDocuments] = useState<Document[]>([]);
 
     const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
@@ -30,9 +34,18 @@ export default function DocumentList({ parentDocumentId, level = 0 } : DocumentL
         }));
     }
 
-    const documents = useQuery(api.documents.getSidevar, {
-        parentDocument: parentDocumentId
-    })
+    const fetchDocuments = async () => {
+        const data = await sidebar(parentDocumentId);
+        setDocuments(data);
+    }
+
+    useEffect(() => {
+        fetchDocuments();
+    }, [parentDocumentId, shouldRefresh]);
+
+    function refreshDocuments(){
+        fetchDocuments();
+    } 
 
     function onRedirect(documentId: string){
         router.push(`/documents/${documentId}`);
@@ -63,21 +76,23 @@ export default function DocumentList({ parentDocumentId, level = 0 } : DocumentL
                 Нет вложенных страниц
             </p>
             {documents.map((document) => (
-                <div key={document._id}>
-                        <Item id={document._id}
-                        onClick={() => onRedirect(document._id)}
+                <div key={document.id}>
+                        <Item id={document.id}
+                        onClick={() => onRedirect(document.id)}
                         label = {document.title}
                         icon = {FileIcon}
-                        documentIcon={document.icon}
-                        active = {params.documentId === document._id}
+                        documentIcon={document.icon!}
+                        active = {params.documentId === document.id}
                         level = {level}
-                        onExpand={() => onExpand(document._id)}
-                        expanded = {expanded[document._id]}
+                        onExpand={() => onExpand(document.id)}
+                        expanded = {expanded[document.id]}
+                        refreshDocuments={refreshDocuments}
                         />
                         {
-                            expanded[document._id] && (
+                            
+                            expanded[document.id as string] && (
                                 <DocumentList
-                                    parentDocumentId={document._id}
+                                    parentDocumentId={document.id}
                                     level={level + 1}
                                 />
                             )

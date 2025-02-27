@@ -1,0 +1,13 @@
+{
+    "appId": "com.pagtion.app",
+    "mac":{
+        "target": "dmg"
+    },
+    "linux":{
+        "target": "AppImage",
+        "category": "Utility"
+    },
+    "win":{
+        "target": ["portable", "msi"]
+    }
+}

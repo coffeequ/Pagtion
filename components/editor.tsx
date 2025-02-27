@@ -2,6 +2,7 @@
 
 import{
     BlockNoteEditor,
+    locales,
     PartialBlock,
 } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react"
@@ -9,12 +10,15 @@ import { BlockNoteView } from "@blocknote/mantine"
 import "@blocknote/mantine/style.css"
 
 import { useEdgeStore } from "@/lib/edgestore";
-
 import { useTheme } from "next-themes";
+//import { useDebounceCallback } from "usehooks-ts";
+import { useDebounceCallback } from "usehooks-ts";
+import { useEffect } from "react";
+
 
 interface IEditorProps{
     onChange: (value: string) => void;
-    initialContent?: string;
+    initialContent?: string | null;
     editable?: boolean;
 }
 
@@ -23,6 +27,8 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
     const { resolvedTheme } = useTheme();
 
     const { edgestore } = useEdgeStore();
+
+    const debouncedOnChange = useDebounceCallback(onChange, 200);
 
     async function handleUpload(file: File){
         
@@ -35,23 +41,13 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
 
     const editor: BlockNoteEditor = useCreateBlockNote({
         initialContent: initialContent ? JSON.parse(initialContent) as PartialBlock[] : undefined,
-        uploadFile: handleUpload
+        uploadFile: handleUpload,
+        dictionary: locales.ru
     });
 
-    //Метод работает
-   editor.onEditorContentChange(() => {onChange(JSON.stringify(editor.document, null, 2))});
-
-    // const uploadToDatabase = useCallback(
-    //     debounce(() => {
-    //         onChange(JSON.stringify(editor.document));
-    //     }, 300), // set any time you want
-    //     [editor, onChange]
-    // );
-    // const uploadToDataBase = () => {
-    //     if(onChange){
-    //         onChange(JSON.stringify(editor.document, null, 2));
-    //     }
-    // }
+   useEffect(() => {
+    editor.onEditorContentChange(() => {debouncedOnChange(JSON.stringify(editor.document, null, 2))});
+   }, [debouncedOnChange, editor]);
     
     return(
         <div>
@@ -63,3 +59,5 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
 }
 
 export default Editor;
+
+

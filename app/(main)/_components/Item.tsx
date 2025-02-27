@@ -1,18 +1,16 @@
-"use client"
-
+import { archived } from "@/actions/ArchiveDocument";
+import { createDocument } from "@/actions/createDocument";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import useRefreshStore from "@/hooks/use-refresh";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
-import { useMutation } from "convex/react";
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface ItemProps {
-    id?: Id<"documents">;
+    id?: string;
     documentIcon?: string;
     active?: boolean;
     expanded?: boolean;
@@ -22,22 +20,24 @@ interface ItemProps {
     label: string;
     onClick?: () => void;
     icon: LucideIcon;
+    refreshDocuments?: () => void;
 }
 
-export default function Item( {id, label, onClick, icon:Icon, active, expanded, onExpand, level = 0, documentIcon, isSearch }: ItemProps ){
+export default function Item( {id, label, onClick, icon:Icon, active, expanded, onExpand, level = 0, documentIcon, isSearch, refreshDocuments}: ItemProps ){
     
+    const shouldRefresh = useRefreshStore((state) => state.triggerRefresh);
+
     const { user } = useUser();
 
     const router = useRouter();
 
-    const create = useMutation(api.documents.create);
-
-    const archive = useMutation(api.documents.archive);
-
     const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
         if(!id) return;
-        const promise = archive({ id }).then(() => router.push(`/documents`));
+        const promise = archived(id, user?.id).then(() => {
+            router.push(`/documents`);
+            refreshDocuments?.();
+        });
         toast.promise(promise, {
             loading: "Перемещение в мусорку...",
             success: "Удаление произошло успешно!",
@@ -52,18 +52,24 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
 
     function onCreate(event: React.MouseEvent<HTMLDivElement, MouseEvent>){
         event.stopPropagation();
-        if(!id) return;
-        const promise = create({title: "Untitled", parentDocument: id}).then((documentId) => {
-            if(!expanded){
-                onExpand?.();
-            }
-            router.push(`/documents/${documentId}`);
-        })
+        if(!id || !user?.id) return;
+        const promise = createDocument("Untitled", user?.id, id)
+            .then((document) => {
+                if(!expanded){
+                    onExpand?.();
+                }
+                else{
+                    shouldRefresh();
+                }
+            router.push(`/documents/${document.id}`);
+        });
+
         toast.promise(promise, {
             loading: "Создание новой заметки...",
             success: "Заметка была успешно создана",
             error: "Ошибка создании заметки"
         });
+
     }
 
     const ChevronIcon = expanded ? ChevronDown : ChevronRight;

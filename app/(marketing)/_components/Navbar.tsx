@@ -3,9 +3,8 @@
 import userScrollTop from "@/hooks/use-scroll-top";
 import { cn } from "@/lib/utils";
 import Logo from "./logo";
-import { ModeToggle } from "@/components/mode-toggle";
-import { useConvexAuth } from "convex/react";
-import { ClerkProvider, SignInButton, UserButton } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react"
+import { SignInButton, UserButton } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import { Inter } from "next/font/google";
 import Spinner from "@/components/Spinner";
@@ -20,7 +19,7 @@ export default function Navbar(){
     
     const scrolled = userScrollTop();
 
-    const {isAuthenticated, isLoading} = useConvexAuth()
+    const { isLoaded, isSignedIn } = useAuth()
 
     return(
         <div className= {cn("z-50 bg-background dark:bg-[#1F1F1F] fixed top-0 grid grid-cols-5 gap-1 items-center w-full p-2 pt-3", scrolled && "shadow-sm bg-background/55 backdrop-blur-md")}>
@@ -28,11 +27,11 @@ export default function Navbar(){
             <Logo/>
             <div></div>
             <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-1">
-                {isLoading && (
+                {!isLoaded && (
                     <Spinner/>
                 )}
                 {
-                    !isAuthenticated && !isLoading && (
+                    !isSignedIn && isLoaded && (
                         <>
                             <SignInButton>
                                 <Button className={cn(fontInter)} variant="ghost">
@@ -44,7 +43,7 @@ export default function Navbar(){
                 }
 
                 {
-                    isAuthenticated && !isLoading && (
+                    isSignedIn && isLoaded && (
                         <>
                             <Button className={cn(fontInter)} variant="ghost" asChild>
                                 <Link href="/documents">

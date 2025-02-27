@@ -1,55 +1,58 @@
 "use client"
 
-import { Doc } from "@/convex/_generated/dataModel";
 import IconPicker from "./icon-picker";
 import { Button } from "@/components/ui/button";
-import { Flashlight, ImageIcon, Smile, X } from "lucide-react";
-import { ComponentRef, use, useRef, useState } from "react";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { ImageIcon, Smile, X } from "lucide-react";
+import { ComponentRef, useRef, useState } from "react";
+
 import TextareaAutosize from "react-textarea-autosize"
 import { useCoverImage } from "@/hooks/use-cover-image";
+import { Document } from "@prisma/client";
 
-interface IToolbarProps{
-    initialData: Doc<"documents">,
+import update from "@/actions/updateDocument";
+import removeIcon from "@/actions/removeIconDocument";
+import { useDebounceCallback } from "usehooks-ts";
+import useRefreshStore from "@/hooks/use-refresh";
+
+interface IToolbarProps {
+    initialData: Document
     preview?: boolean,
+    onTitleChange: (title: string) => void;
 }
 
-export default function Toolbar({ initialData, preview } : IToolbarProps){
+export default function Toolbar({ initialData, preview, onTitleChange } : IToolbarProps){
 
     const inputRef = useRef<ComponentRef<"textarea">>(null);
+
+    const [icon, setIcon] = useState(initialData.icon);
 
     const [isEditing, setIsEditing] = useState(false);
 
     const [value, setValue] = useState(initialData.title);
 
-    const coverImage = useCoverImage();
+    const debounceTitleChange = useDebounceCallback(onTitleChange, 200);
 
-    const update = useMutation(api.documents.update);
-    
-    const removeIcon = useMutation(api.documents.removeIcon);
+    const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
+
+    const coverImage = useCoverImage();
 
     function enableInput() {
         if(preview) return;
-
         setIsEditing(true);
         setTimeout(() => {
-            setValue(initialData.title);
+            setValue(value);
             inputRef.current?.focus();
-            console.log("Метод сработал");
         }, 0);
     }
 
     function disableInput(){
         setIsEditing(false);
+        debounceTitleChange(value);
     }
 
     function onInput(value: string) {
         setValue(value);
-        update({
-            id: initialData._id,
-            title: value || "Untitled"
-        });
+        debounceTitleChange(value);
     }
 
     function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>){
@@ -61,25 +64,25 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
 
     function onIconSelect(icon: string){
         update({
-            id: initialData._id,
+            documentId: initialData.id,
             icon
-        });
+        }).then((item) => setIcon(item.icon));
+        triggerRefresh();
     }
 
     function onIconRemove(){
-        removeIcon({
-            id: initialData._id
-        });
+        removeIcon(initialData.id).then(() => setIcon(null));
+        triggerRefresh();
     }
 
     return(
         <div className="pl-[54px] group relative">
             {
-                !!initialData.icon && !preview && (
+                !!icon && !preview && (
                     <div className="flex items-center gap-x-2 group/icon pt-6">
                         <IconPicker onChange={onIconSelect}>
                             <p className="text-6xl hover:opacity-75 transition">
-                                {initialData.icon}
+                                {icon}
                             </p>
                             <Button onClick={onIconRemove} className="rounded-full opacity-0 group-hover/icon:opacity-100 transition text-muted-foreground text-xs" variant='outline' size="icon">
                                 <X className="h-4 w-4"/>
@@ -89,15 +92,15 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
                 )
             }
             {
-                !!initialData.icon && preview && (
+                !!icon && preview && (
                     <p className="text-6xl pt-6">
-                        {initialData.icon}
+                        {icon}
                     </p>
                 )
             }
             <div className="opacity-0 group-hover:opacity-100 flex items-center gap-x-1 py-4">
                 {
-                    !initialData.icon && !preview && (
+                    !icon && !preview && (
                         <IconPicker asChild onChange={onIconSelect}>
                             <Button className="text-muted-foreground text-xs" variant="outline">
                                 <Smile className="h-4 w-4 mr-2" />
@@ -107,10 +110,11 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
                     )
                 }
                 {
-                    !initialData.coverImage && !preview && (
+                    
+                    !coverImage.url && !preview && (
                         <Button onClick={coverImage.onOpen} className="text-muted-foreground text-xs" variant="outline">
                             <ImageIcon className="h-4 w-4 mr-2"/>
-                            Добавить задний фон
+                            Добавить обложку
                         </Button>
                     )
                 }
@@ -126,8 +130,14 @@ export default function Toolbar({ initialData, preview } : IToolbarProps){
                         className="text-5xl bg-transparent font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF] resize-none"
                     />
                 ): (
-                    <div onClick={enableInput} className="pb-[11.5px] text-5xl font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF]">
-                        {initialData.title}
+                    <div onClick={enableInput} aria-placeholder="Untitled" className="pb-[11.5px] text-5xl font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF]">
+                        {
+                            value && (
+                                <p>{value}</p>
+                            ) || (
+                                <p>Untitled</p>
+                            )
+                        }
                     </div>
                 )
             }

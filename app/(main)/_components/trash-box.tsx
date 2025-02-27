@@ -3,29 +3,44 @@
 import ConfirmModal from "@/components/modals/confirm-modal";
 import Spinner from "@/components/Spinner";
 import { Input } from "@/components/ui/input";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useMutation, useQuery } from "convex/react";
+
 import { Search, Trash, Undo } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
+import trash from "@/actions/trashDocument";
+import restore from "@/actions/restoreDocument";
+import remove from "@/actions/removeDocument";
+import { Document } from "@prisma/client";
+import { useAuth } from "@clerk/clerk-react";
+import useRefreshStore from "@/hooks/use-refresh";
 
 export default function TrashBox(){
 
     const router = useRouter();
 
+    const {userId} = useAuth();
+
     const params = useParams();
-
-    const documents = useQuery(api.documents.getTrash);
-
-    const restore = useMutation(api.documents.restore);
-
-    const remove = useMutation(api.documents.remove);
 
     const [search, setSearch] = useState("");
 
-    const filtredDocuments = documents?.filter((document) => {
+    const [documents, setDocuments] = useState<Document[]>([]);
+
+    const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
+
+    const [updateTrash, setUpdateTrash] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await trash(userId as string);
+            setDocuments(data);
+        }
+        fetchData();
+    }, [updateTrash]);
+
+    const filtredDocuments = documents.filter((document: Document) => {
         return document.title.toLowerCase().includes(search.toLowerCase());
     });
 
@@ -33,28 +48,31 @@ export default function TrashBox(){
         router.push(`/documents/${documentId}`);
     }
 
-    function onRestore(event: React.MouseEvent<HTMLDivElement, MouseEvent>, documentId: Id<"documents">){
+    function onRestore(event: React.MouseEvent<HTMLDivElement, MouseEvent>, documentId: string){
+        debugger
         event.stopPropagation();
 
-        const promise = restore({ id: documentId });
+        const promise = restore(documentId, userId as string);
 
         toast.promise(promise, {
             loading: "Восстановление заметки...",
             success: "Заметка была успешно восстановлена!",
             error: "Ошибка восставновление заметки"
         });
+        triggerRefresh();
+        setUpdateTrash((prev) => !prev);
     }
 
 
-    function onRemove(documentId: Id<"documents">){
-        const promise = remove({ id: documentId });
+    function onRemove(documentId: string){
+        const promise = remove(documentId);
 
         toast.promise(promise, {
             loading: "Удаление заметки...",
             success: "Удаление произошло успешно!",
             error: "Ошибка удаления заметки"
         });
-
+        setUpdateTrash((prev) => !prev);
         if(params.documentId === documentId){
             router.push("/documents")
         }
@@ -78,16 +96,16 @@ export default function TrashBox(){
                 <p className="hidden last:block text-xs text-center text-muted-foreground pb-2">
                     Страницы не были найдены
                 </p>
-                {filtredDocuments?.map((document) => (
-                    <div key={document._id} role = "button" onClick={() => onClick(document._id)} className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between">
+                {filtredDocuments?.map((document: Document) => (
+                    <div key={document.id} role = "button" onClick={() => onClick(document.id)} className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between">
                         <span className="truncate pl-2">
                             {document.title}
                         </span>
                         <div className="flex items-center">
-                            <div onClick={(e) => onRestore(e, document._id)} role="button" className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600">
+                            <div onClick={(e) => onRestore(e, document.id)} role="button" className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600">
                                 <Undo className="w-4 h-4 text-muted-foreground"/>
                             </div>
-                            <ConfirmModal onConfirm={() => onRemove(document._id)}>
+                            <ConfirmModal onConfirm={() => onRemove(document.id)}>
                                 <div role="button" className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600">
                                     <Trash className="h-4 w-4 text-muted-foreground"/>
                                 </div>

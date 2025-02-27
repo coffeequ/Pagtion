@@ -3,20 +3,19 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { api } from "@/convex/_generated/api";
-import { Doc } from "@/convex/_generated/dataModel";
-import { useMutation } from "convex/react";
+
 import { useRef, useState } from "react";
 
+import { Document } from "@prisma/client";
+import update from "@/actions/updateDocument";
+
 interface TitleProps{
-    initialData: Doc<"documents">;
+    initialData: Document
 }
 
 export default function Title({initialData}: TitleProps){
 
     const inputRef = useRef<HTMLInputElement>(null); 
-
-    const update = useMutation(api.documents.update);
 
     const [title, setTitle] = useState(initialData.title || "Untitled");
 
@@ -39,7 +38,7 @@ export default function Title({initialData}: TitleProps){
     function onChange(event: React.ChangeEvent<HTMLInputElement>){
         setTitle(event.target.value);
         update({
-            id: initialData._id,
+            documentId: initialData.id,
             title: event.target.value || "Untitled",
         });
     }

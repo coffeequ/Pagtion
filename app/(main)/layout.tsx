@@ -1,16 +1,16 @@
 "use client"
 
 import Spinner from "@/components/Spinner";
-import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
 import Navigation from "./_components/Navigation";
 import SearchCommand from "@/components/search-command";
+import { useUser } from "@clerk/clerk-react";
 
 export default function MainLayot({ children } : { children:React.ReactNode }){
-    
-    const {isAuthenticated, isLoading} = useConvexAuth();
 
-    if(isLoading){
+    const {isSignedIn, isLoaded} = useUser();
+    
+    if(!isLoaded){
         return (
           <div className="h-full flex items-center justify-center">
             <Spinner size="lg"/>
@@ -18,7 +18,7 @@ export default function MainLayot({ children } : { children:React.ReactNode }){
         );
     }
 
-    if(!isAuthenticated){
+    if(!isSignedIn){
         return redirect("/");
     }
 

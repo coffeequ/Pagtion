@@ -2,20 +2,25 @@
 
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/clerk-react";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api"
+
 import { PlusCircle } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+
+import { createDocument } from "@/actions/createDocument";
 
 export default function DocumentPage(){
     const router = useRouter();
     const { user } = useUser();
-    const create = useMutation(api.documents.create);
+    const create = createDocument;
+
+    if(!user?.id){
+        redirect("/documents");
+    }
 
     function onCreate(){
-        const promise = create({ title: "Untitled" }).then((documentId) => router.push(`/documents/${documentId}`));
-
+        const promise = create("Untitled", user!.id).then((documentId) => router.push(`/documents/${documentId.id}`));
+        
         toast.promise(promise, {
             loading: "Создание новой заметки...",
             success: "Новая заметка создана!",

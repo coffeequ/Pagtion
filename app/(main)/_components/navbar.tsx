@@ -1,8 +1,5 @@
 "use client"
 
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
 import { MenuIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import Title from "./title";
@@ -10,6 +7,10 @@ import Banner from "./banner";
 import Menu from "./menu";
 import Publish from "./publish";
 
+import getId from "@/actions/idDocument";
+import { useEffect, useState } from "react";
+import { Document } from "@prisma/client";
+import { useAuth } from "@clerk/clerk-react";
 
 
 interface NavbarProps {
@@ -19,11 +20,25 @@ interface NavbarProps {
 
 export default function Navbar({ isCollapsed, onResetWidth } : NavbarProps) {
     
-    const params = useParams();
+    const [document, setDocuments] = useState<Document>();
 
-    const document = useQuery(api.documents.getById, {
-        documentId: params.documentId as Id<"documents">
-    });
+    const [isRefresh, setIsRefresh] = useState(false);
+
+    const { userId } = useAuth();
+
+    const { documentId } = useParams();
+
+    useEffect(() => {
+        const fetchDocuments = async () => {
+            const data = await getId(documentId as string, userId!);
+            setDocuments(data); 
+        }
+        fetchDocuments();
+    }, [isRefresh, documentId]);
+
+    function refresh() {
+        setIsRefresh((prev) => !prev);
+    }
 
     if(document === undefined){
         return (
@@ -51,14 +66,14 @@ export default function Navbar({ isCollapsed, onResetWidth } : NavbarProps) {
                 <div className="flex items-center justify-between w-full">
                     <Title initialData = {document}/>
                     <div className="flex items-center gap-x-2">
-                        <Publish initialData = {document} />
-                        <Menu documentId = {document._id} />
+                        <Publish initialData = {document} refresh={refresh} />
+                        <Menu documentId = {document.id} />
                     </div>
                 </div>
             </nav>
             {
                 document.isArchived && (
-                    <Banner documentId = {document._id} />
+                    <Banner documentId = {document.id} />
                 )
             }
         </>

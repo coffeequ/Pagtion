@@ -4,10 +4,8 @@ import { cn } from "@/lib/utils";
 import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Trash } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ComponentRef, useEffect, useRef, useState } from "react";
-import { useMutation } from "convex/react";
 import {useMediaQuery} from "usehooks-ts"
 import UserItem from "./user-item";
-import { api } from "@/convex/_generated/api";
 import Item from "./Item";
 import { toast } from "sonner";
 import DocumentList from "./document-list";
@@ -18,14 +16,21 @@ import { useSearch } from "@/hooks/use-search";
 import { useSettings } from "@/hooks/use-settings";
 import Navbar from "./navbar";
 
+import { createDocument } from "@/actions/createDocument";
+import { useAuth } from "@clerk/clerk-react";
+import useRefreshStore from "@/hooks/use-refresh";
+
 export default function Navigation(){
+
+    const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
+
     const router = useRouter();
     const settings = useSettings();
     const search = useSearch();
     const params = useParams();
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px)");
-    const create = useMutation(api.documents.create);
+    const { userId } = useAuth();
 
     const isResizingRef = useRef(false);
     const sidebarRef = useRef<ComponentRef<"aside">>(null);
@@ -111,7 +116,10 @@ export default function Navigation(){
     }
 
     function handleCreateNote() {
-        const promise = create( { title: "Untitled" } ).then((documentId) => router.push(`/documents/${documentId}`));
+        const promise = createDocument("Untitled", userId!).then((documentId) => {
+            router.push(`/documents/${documentId.id}`);
+            triggerRefresh();
+        });
 
         toast.promise(promise, {
             loading: "Создание новой заметки...",

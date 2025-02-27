@@ -8,20 +8,18 @@ import { useCoverImage } from "@/hooks/use-cover-image";
 
 import { SingleImageDropzone } from "@/components/single-image-dropzone";
 import { useState } from "react";
-import { api } from "@/convex/_generated/api";
 import { useEdgeStore } from "@/lib/edgestore";
-import { useMutation } from "convex/react";
 import { useParams } from "next/navigation";
-import { Id } from "@/convex/_generated/dataModel";
+
+import update from "@/actions/updateDocument";
+
 
 export default function CoverImageModal(){
 
     const params = useParams();
-    
-    const update = useMutation(api.documents.update);
 
     const coverImage = useCoverImage();
-    
+        
     const [file, setFile] = useState<File>();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,6 +34,7 @@ export default function CoverImageModal(){
 
     async function onChange(file?: File) {
         if(file){
+            debugger
             setIsSubmitting(true);
             setFile(file);
 
@@ -45,13 +44,13 @@ export default function CoverImageModal(){
                     replaceTargetUrl: coverImage.url
                 }
             });
-            
 
-            await update({
-                id: params.documentId as Id<"documents">,
+            update({
+                documentId: params.documentId as string,
                 coverImage: res.url,
             });
-
+            coverImage.setCoverImage(res.url);
+            setTimeout(() => coverImage.setCoverImage(res.url), 100);
             onClose();
         }
     }
@@ -61,7 +60,7 @@ export default function CoverImageModal(){
             <DialogContent>
                 <DialogHeader>
                     <h2 className="text-center text-lg font-semibold">
-                        Изображение фона
+                        Изображение
                     </h2>
                 </DialogHeader>
                 <SingleImageDropzone className="w-full outline-none" disabled = {isSubmitting} value={file} onChange={onChange} />
