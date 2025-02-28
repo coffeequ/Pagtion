@@ -6,7 +6,7 @@ const createWindow = () =>{
         height: 600,
     });
 
-    win.loadURL("http://localhost:3000/documents");
+    win.loadURL("https://pagtion.vercel.app/");
 }
 
 app.on("ready", () => {
