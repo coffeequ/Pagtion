@@ -4,7 +4,6 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "sonner"
 import ModalProvider from "@/components/providers/modal-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
-import { ConvexClientProvider } from "@/components/providers/convex-provider";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -43,7 +42,6 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <body>
-        <ConvexClientProvider>
           <EdgeStoreProvider>
             <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange storageKey="pagnotion-theme">
               <Toaster position="bottom-center"/>
@@ -51,7 +49,6 @@ export default function RootLayout({
               {children}
             </ThemeProvider>
           </EdgeStoreProvider>
-        </ConvexClientProvider>
       </body>
     </html>
   );
