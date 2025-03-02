@@ -1,10 +1,10 @@
-import LoginForm from "../_components/login-form"
+import RegisterForm from "../_components/register-form"
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <div className="grid h-full place-items-center">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <LoginForm />
+        <RegisterForm />
       </div>
     </div>
   )
