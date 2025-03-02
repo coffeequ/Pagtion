@@ -4,7 +4,6 @@ import Spinner from "@/components/Spinner";
 import { redirect } from "next/navigation";
 import Navigation from "./_components/Navigation";
 import SearchCommand from "@/components/search-command";
-import { useUser } from "@clerk/clerk-react";
 
 export default function MainLayot({ children } : { children:React.ReactNode }){
 

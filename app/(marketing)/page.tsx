@@ -1,4 +1,3 @@
-import Footer from "./_components/footer";
 import Heading from "./_components/heading";
 import { Hearos } from "./_components/hearos";
 
@@ -10,7 +9,6 @@ export default function MarketingPage() {
                 <Heading/>
                 <Hearos/>
             </div>
-            <Footer/>
         </div>
     );
 }

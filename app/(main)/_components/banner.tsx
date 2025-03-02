@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 import remove from "@/actions/removeDocument";
 import restore from "@/actions/restoreDocument";
-import { useAuth } from "@clerk/clerk-react";
 import useRefreshStore from "@/hooks/use-refresh";
 
 interface IBannerProps{
