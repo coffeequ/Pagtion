@@ -21,7 +21,10 @@ export default async function login(values: z.infer<typeof LoginSchema>){
             email,
             password,
             redirectTo: DEFAULT_LOGIN_REDIRECT
-        })
+        });
+        
+        return { success: "Код отправлен на почту" }
+
     } catch (error) {
         if(error instanceof AuthError){
             switch (error.type) {
