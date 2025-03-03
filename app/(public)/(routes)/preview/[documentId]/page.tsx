@@ -26,14 +26,16 @@ export default function DocumentIdPage(){
 
     const { data } = useSession();
 
+    const userId = data?.user?.id;
+
     const [document, setDocument] = useState<Document>();
 
     useEffect(() => {
         async function fetchDocument(){
-            if(!data?.user?.id){
+            if(!userId){
                 throw new Error("Не найден id пользователя");
             };
-            const document = await getId(documentId as string, data?.user?.id!);
+            const document = await getId(documentId as string, userId);
             setDocument(document);
 
             if(document.coverImage){
