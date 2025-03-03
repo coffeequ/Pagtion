@@ -26,7 +26,9 @@ export default function DocumentPage(){
     }
 
     function onCreate(){
-        if(!userId) return;
+        if(!userId){
+            throw new Error("Не найден id пользователя!");
+        }
         const promise = create("Untitled", userId).then((documentId) => router.push(`/documents/${documentId.id}`));
         
         toast.promise(promise, {

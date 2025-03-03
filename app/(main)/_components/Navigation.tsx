@@ -116,7 +116,9 @@ export default function Navigation(){
     }
 
     function handleCreateNote() {
-        if(!data?.user?.id) return;
+        if(!data?.user?.id){
+            throw new Error("Не найден id пользователя");
+        }
         const promise = createDocument("Untitled", data?.user?.id).then((documentId) => {
             router.push(`/documents/${documentId.id}`);
             triggerRefresh();

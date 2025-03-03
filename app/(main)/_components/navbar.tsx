@@ -32,7 +32,9 @@ export default function Navbar({ isCollapsed, onResetWidth } : NavbarProps) {
 
     useEffect(() => {
         const fetchDocuments = async () => {
-            if(!userId) return;
+            if(!userId){
+                throw new Error("Не найден id пользователя!");
+            }
             const data = await getId(documentId as string, userId);
             setDocuments(data); 
         }

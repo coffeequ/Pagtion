@@ -30,7 +30,9 @@ export default function DocumentIdPage(){
 
     useEffect(() => {
         async function fetchDocument(){
-            if(data?.user?.id) return;
+            if(!data?.user?.id){
+                throw new Error("Не найден id пользователя");
+            };
             const document = await getId(documentId as string, data?.user?.id!);
             setDocument(document);
 

@@ -35,7 +35,9 @@ export default function SearchCommand(){
 
     useEffect(() => {
         async function fetchDocument(){
-            if(!userId) return;
+            if(!userId){
+                throw new Error("Не найден id пользователя");
+            }
             const data = await searchDocument(userId);
             setDocuments(data);
         }
