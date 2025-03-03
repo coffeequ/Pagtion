@@ -4,8 +4,8 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { Skeleton } from "@/components/ui/skeleton";
 import useRefreshStore from "@/hooks/use-refresh";
 import { cn } from "@/lib/utils";
-import { useUser } from "@clerk/clerk-react";
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -27,14 +27,18 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
     
     const shouldRefresh = useRefreshStore((state) => state.triggerRefresh);
 
-    const { user } = useUser();
+    const { data } = useSession();
+
+    const userId = data?.user?.id;
+
+    const userName = data?.user?.name;
 
     const router = useRouter();
 
     const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
-        if(!id || !user?.id) return;
-        const promise = archived(id, user?.id).then(() => {
+        if(!id || !userId) return;
+        const promise = archived(id, userId).then(() => {
             router.push(`/documents`);
             refreshDocuments?.();
         });
@@ -52,8 +56,8 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
 
     function onCreate(event: React.MouseEvent<HTMLDivElement, MouseEvent>){
         event.stopPropagation();
-        if(!id || !user?.id) return;
-        const promise = createDocument("Untitled", user?.id, id)
+        if(!id || !userId) return;
+        const promise = createDocument("Untitled", userId, id)
             .then((document) => {
                 if(!expanded){
                     onExpand?.();
@@ -112,7 +116,7 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator/>
                                 <div className="text-xs text-muted-foreground p-2">
-                                    Последний кто изменял: {user?.fullName}
+                                    Последний кто изменял: {userName}
                                 </div>
                             </DropdownMenuContent>
                         </DropdownMenu>

@@ -10,8 +10,7 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { Skeleton } from "./ui/skeleton";
 
 import removeCoverImageDocument from "@/actions/removeCoverImageDocument";
-
-import { useAuth } from "@clerk/clerk-react";
+import { useSession } from "next-auth/react";
 
 interface ICoverProps {
     url?: string,
@@ -22,7 +21,7 @@ export default function Cover({ preview, url } : ICoverProps){
     
     const { edgestore } = useEdgeStore();
 
-    const { userId } = useAuth();
+    const { data } = useSession();
 
     const params = useParams();
 
@@ -37,7 +36,7 @@ export default function Cover({ preview, url } : ICoverProps){
             });
         }
 
-        await removeCoverImageDocument(params.documentId as string, userId!);
+        await removeCoverImageDocument(params.documentId as string, data?.user?.id);
         setCoverImage("");
     }
     

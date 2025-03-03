@@ -1,15 +1,22 @@
 "use client"
 
-import { ChevronsLeftRight } from "lucide-react";
+import { ChevronsLeftRight, User } from "lucide-react";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { SignOutButton, useUser } from "@clerk/clerk-react";
+import { signOut, useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 
 export default function UserItem(){
 
-    const { user } = useUser();
+    const { data } = useSession();
+
+    const userImage = data?.user?.image;
+
+    const userName = data?.user?.name;
+
+    const userMail = data?.user?.email;
 
     return (
         <DropdownMenu>
@@ -17,10 +24,16 @@ export default function UserItem(){
                 <div role="button" className="flex items-center text-sm p-3 w-full hover:bg-primary/5">
                     <div className="gap-x-2 flex items-center max-w-[150px]">
                         <Avatar className="h-5 w-5">
-                            <AvatarImage src={user?.imageUrl}/>
+                            {
+                                !userImage ? (
+                                    <User/>
+                                ):(
+                                    <AvatarImage src={userImage} />
+                                )
+                            }
                         </Avatar>
                         <span className="text-start font-medium line-clamp-1">
-                            {user?.fullName}
+                            {userName}
                         </span>
                     </div>
                     <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4"/>
@@ -29,26 +42,32 @@ export default function UserItem(){
             <DropdownMenuContent className="w-80" align="start" alignOffset={11} forceMount>
                 <div className="flex flex-col space-y-4 p-2">
                     <p className="text-xs font-medium leading-none text-muted-foreground">
-                        {user?.emailAddresses[0].emailAddress}
+                        {userMail}
                     </p>
                 </div>
                 <div className="flex items-center gap-x-2">
                     <div className="rounded-md bg-secondary p-1">
-                        <Avatar className="h-8 w-8">
-                            <AvatarImage src={user?.imageUrl}/>
+                        <Avatar className="h-5 w-5">
+                            {
+                                !userImage ? (
+                                    <User/>
+                                ):(
+                                    <AvatarImage src={userImage} />
+                                )
+                            }
                         </Avatar>
                     </div>
                     <div className="space-y-1">
                         <p className="text-sm line-clamp-1">
-                            {user?.fullName} Pagtion 
+                            {userName} Pagtion 
                         </p>
                     </div>
                 </div>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem asChild className="w-full cursor-pointer text-muted-foreground">
-                    <SignOutButton>
-                        Выход
-                    </SignOutButton>
+                    <Button variant="ghost" onClick={() => { signOut() }}>
+                        Выйти
+                    </Button>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

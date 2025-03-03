@@ -8,7 +8,7 @@ import Cover from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
 import update from "@/actions/updateDocument";
 import getId from "@/actions/idDocument";
-import { useAuth } from "@clerk/clerk-react";
+import { useSession } from "next-auth/react";
 import { Document } from "@prisma/client";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";
@@ -24,13 +24,18 @@ export default function DocumentIdPage(){
 
     const { url, setCoverImage } = useCoverImage();
 
-    const { userId } = useAuth(); 
+    const { data } = useSession();
+
 
     const [document, setDocument] = useState<Document>();
 
     useEffect(() => {
         async function fetchDocument(){
-            const document = await getId(documentId as string, userId!);
+            if(!data?.user?.id){
+                throw new Error("Не найден id пользователя");
+            };
+            console.log(data.user.id);
+            const document = await getId(documentId as string, data.user.id);
             setDocument(document);
 
             if(document.coverImage){
@@ -40,7 +45,8 @@ export default function DocumentIdPage(){
                 setCoverImage("");
             }
         }
-        if(!userId){
+        
+        if(!data?.user?.id){
             redirect("/documents");
         }
     
