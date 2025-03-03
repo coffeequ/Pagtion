@@ -13,14 +13,16 @@ import trash from "@/actions/trashDocument";
 import restore from "@/actions/restoreDocument";
 import remove from "@/actions/removeDocument";
 import { Document } from "@prisma/client";
-import { useAuth } from "@clerk/clerk-react";
 import useRefreshStore from "@/hooks/use-refresh";
+import { useSession } from "next-auth/react";
 
 export default function TrashBox(){
 
     const router = useRouter();
 
-    const {userId} = useAuth();
+    const { data } = useSession();
+
+    const userId = data?.user?.id;
 
     const params = useParams();
 
@@ -34,7 +36,7 @@ export default function TrashBox(){
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await trash(userId as string);
+            const data = await trash(userId);
             setDocuments(data);
         }
         fetchData();

@@ -17,8 +17,8 @@ import { useSettings } from "@/hooks/use-settings";
 import Navbar from "./navbar";
 
 import { createDocument } from "@/actions/createDocument";
-import { useAuth } from "@clerk/clerk-react";
 import useRefreshStore from "@/hooks/use-refresh";
+import { useSession } from "next-auth/react";
 
 export default function Navigation(){
 
@@ -30,7 +30,7 @@ export default function Navigation(){
     const params = useParams();
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px)");
-    const { userId } = useAuth();
+    const { data } = useSession();
 
     const isResizingRef = useRef(false);
     const sidebarRef = useRef<ComponentRef<"aside">>(null);
@@ -116,7 +116,8 @@ export default function Navigation(){
     }
 
     function handleCreateNote() {
-        const promise = createDocument("Untitled", userId!).then((documentId) => {
+        if(!data?.user?.id) return;
+        const promise = createDocument("Untitled", data?.user?.id).then((documentId) => {
             router.push(`/documents/${documentId.id}`);
             triggerRefresh();
         });

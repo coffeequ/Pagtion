@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import remove from "@/actions/removeDocument";
 import restore from "@/actions/restoreDocument";
 import useRefreshStore from "@/hooks/use-refresh";
+import { useSession } from "next-auth/react";
 
 interface IBannerProps{
     documentId: string
@@ -17,7 +18,7 @@ export default function Banner({documentId}: IBannerProps){
 
     const router = useRouter();
 
-    const {userId} = useAuth();
+    const { data } = useSession();
 
     const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
 
@@ -34,8 +35,8 @@ export default function Banner({documentId}: IBannerProps){
     }
 
     function onRestore(){
-
-        const promise = restore(documentId, userId as string);
+        if(!data?.user?.id) return;
+        const promise = restore(documentId, data.user.id);
 
         toast.promise(promise, {
             loading: "Восстановление заметки...",

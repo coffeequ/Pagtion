@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "sonner"
 import ModalProvider from "@/components/providers/modal-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import { SessionProvider } from "next-auth/react";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -42,13 +43,15 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <body>
-          <EdgeStoreProvider>
-            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange storageKey="pagnotion-theme">
-              <Toaster position="bottom-center"/>
-              <ModalProvider/>
-              {children}
-            </ThemeProvider>
-          </EdgeStoreProvider>
+        <SessionProvider>
+            <EdgeStoreProvider>
+              <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange storageKey="pagnotion-theme">
+                <Toaster position="bottom-center"/>
+                <ModalProvider/>
+                {children}
+              </ThemeProvider>
+            </EdgeStoreProvider>
+          </SessionProvider>
       </body>
     </html>
   );

@@ -4,13 +4,13 @@ import {
     DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Trash } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { archived } from "@/actions/ArchiveDocument";
+import { useSession } from "next-auth/react";
 
 interface IMenuProps {
     documentId: string;
@@ -20,7 +20,9 @@ export default function Menu({documentId} : IMenuProps) {
 
     const router = useRouter();
 
-    const { user } = useUser();
+    const { data } = useSession();
+
+    const userName = data?.user?.name;
 
     const archive = archived;
 
@@ -50,7 +52,7 @@ export default function Menu({documentId} : IMenuProps) {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator>
                     <div className="text-xs text-muted-foreground p-2">
-                        Последний кто редактировал: {user?.fullName}
+                        Последний кто редактировал: {userName}
                     </div>
                 </DropdownMenuSeparator>
             </DropdownMenuContent>

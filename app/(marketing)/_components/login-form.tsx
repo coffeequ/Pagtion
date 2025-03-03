@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState, useTransition } from "react"
+import { useSearchParams } from "next/navigation"
 
 import { LoginSchema } from "@/schemas"
 import { Input } from "@/components/ui/input"
@@ -26,11 +27,8 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { Mail } from "lucide-react"
 
 export default function LoginForm(){
-    const onClick = (provider: "google" | "mail") => {
-        signIn(provider, {
-            redirectTo: DEFAULT_LOGIN_REDIRECT
-        });
-    }
+    const searchParams = useSearchParams();
+    const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Почты различаются!" : "";
 
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
@@ -43,6 +41,12 @@ export default function LoginForm(){
             password: "",
         }
     });
+
+    const onClick = (provider: "google" | "mail") => {
+        signIn(provider, {
+            redirectTo: DEFAULT_LOGIN_REDIRECT
+        });
+    }
 
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         setError("");
@@ -94,7 +98,7 @@ export default function LoginForm(){
                             </FormItem>
                         )} />
                     </div>
-                    <FormError message={error}/>
+                    <FormError message={error || urlError}/>
                     <FormSucces message={success}/>
                     <Button type="submit" className="w-full" disabled={isPading}>
                         Авторизироваться

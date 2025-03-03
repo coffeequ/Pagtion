@@ -10,7 +10,7 @@ import Publish from "./publish";
 import getId from "@/actions/idDocument";
 import { useEffect, useState } from "react";
 import { Document } from "@prisma/client";
-import { useAuth } from "@clerk/clerk-react";
+import { useSession } from "next-auth/react";
 
 
 interface NavbarProps {
@@ -24,13 +24,16 @@ export default function Navbar({ isCollapsed, onResetWidth } : NavbarProps) {
 
     const [isRefresh, setIsRefresh] = useState(false);
 
-    const { userId } = useAuth();
+    const { data } = useSession();
+
+    const userId = data?.user?.id;
 
     const { documentId } = useParams();
 
     useEffect(() => {
         const fetchDocuments = async () => {
-            const data = await getId(documentId as string, userId!);
+            if(!userId) return;
+            const data = await getId(documentId as string, userId);
             setDocuments(data); 
         }
         fetchDocuments();

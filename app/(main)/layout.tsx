@@ -4,12 +4,13 @@ import Spinner from "@/components/Spinner";
 import { redirect } from "next/navigation";
 import Navigation from "./_components/Navigation";
 import SearchCommand from "@/components/search-command";
+import { useSession } from "next-auth/react";
 
 export default function MainLayot({ children } : { children:React.ReactNode }){
-
-    const {isSignedIn, isLoaded} = useUser();
     
-    if(!isLoaded){
+    const { status } = useSession();
+    
+    if(status === "loading"){
         return (
           <div className="h-full flex items-center justify-center">
             <Spinner size="lg"/>
@@ -17,7 +18,7 @@ export default function MainLayot({ children } : { children:React.ReactNode }){
         );
     }
 
-    if(!isSignedIn){
+    if(status === "unauthenticated"){
         return redirect("/");
     }
 

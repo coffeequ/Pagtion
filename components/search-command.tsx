@@ -9,13 +9,15 @@ import { File } from "lucide-react";
 import { DialogTitle } from "./ui/dialog";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command"; 
 import { Document } from "@prisma/client";
-import { useAuth } from "@clerk/clerk-react";
+import { useSession } from "next-auth/react";
 
 export default function SearchCommand(){
     
     const router = useRouter();
 
-    const { userId } = useAuth();
+    const { data } = useSession();
+
+    const userId = data?.user?.id;
 
     const [isMounted, setIsMounted] = useState(false);
 
@@ -33,7 +35,8 @@ export default function SearchCommand(){
 
     useEffect(() => {
         async function fetchDocument(){
-            const data = await searchDocument(userId!);
+            if(!userId) return;
+            const data = await searchDocument(userId);
             setDocuments(data);
         }
         

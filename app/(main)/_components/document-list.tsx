@@ -9,7 +9,7 @@ import { Document } from "@prisma/client";
 
 import sidebar from "@/actions/sidebarDocument";
 import useRefreshStore from "@/hooks/use-refresh";
-import { useAuth } from "@clerk/clerk-react";
+import { useSession } from "next-auth/react";
 
 interface DocumentListProps{
     parentDocumentId?: string;
@@ -20,7 +20,9 @@ export default function DocumentList({ parentDocumentId, level = 0} : DocumentLi
 
     const shouldRefresh = useRefreshStore((state) => state.shouldRefresh);
 
-    const { userId } = useAuth();
+    const { data } = useSession();
+
+    const userId = data?.user?.id;
 
     const params = useParams();
 
