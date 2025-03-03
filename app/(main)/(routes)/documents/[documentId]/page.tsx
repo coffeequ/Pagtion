@@ -8,7 +8,7 @@ import Cover from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
 import update from "@/actions/updateDocument";
 import getId from "@/actions/idDocument";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Document } from "@prisma/client";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";

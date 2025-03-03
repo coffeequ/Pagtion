@@ -4,6 +4,7 @@ import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 
@@ -13,9 +14,9 @@ const fontInter = Inter({
 });
 
 export default function Heading(){
-
-    // const { isLoaded, isSignedIn } = useAuth()
     
+    const { status } = useSession();
+
     return(
         <div className="max-w-3xl space-y-4">
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
@@ -24,15 +25,15 @@ export default function Heading(){
             <h3 className="text-base sm:text-xl md:text-2xl font-medium">
                 лучше, быстрее, продуктивнее
             </h3>
-            {/* {
-                !isLoaded && (
+            {
+                status === "loading" && (
                     <div className="w-full flex items-center justify-center">
                         <Spinner size="lg"/>    
                     </div>
                 )
             }
             {
-                isSignedIn && isLoaded && (
+                status === "authenticated" && (
                     <Button className={cn(fontInter)} asChild>
                         <Link href="/documents">
                             Войти в Pagtion
@@ -41,8 +42,8 @@ export default function Heading(){
                     </Button>
                 )
             }
-            {
-                !isSignedIn && !isLoaded && (
+            {/* {
+                status === "unauthenticated" && (
                     <SignInButton mode="modal">
                         <Button className={cn(fontInter)}>
                             Let`s go

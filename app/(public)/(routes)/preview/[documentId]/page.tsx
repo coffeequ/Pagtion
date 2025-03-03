@@ -12,7 +12,6 @@ import { Document } from "@prisma/client";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";
 import { useParams } from "next/navigation";
-import { useSearch } from "@/hooks/use-search";
 import { useSession } from "next-auth/react";
 
 export default function DocumentIdPage(){
