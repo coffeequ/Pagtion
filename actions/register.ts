@@ -7,6 +7,9 @@ import { prisma } from "@/lib/prisma";
 import { RegisterSchema } from "@/schemas";
 
 import { getUserByEmail } from "@/actions/user"
+import { signIn } from "next-auth/react";
+import { AuthError } from "next-auth";
+
 
 export default async function register(values: z.infer<typeof RegisterSchema>){
     const validatedFields = RegisterSchema.safeParse(values);
@@ -33,7 +36,24 @@ export default async function register(values: z.infer<typeof RegisterSchema>){
         }
     });
 
+    
+    try {
+        await signIn("credentials", {
+            email,
+            name,
+            hashedPassword,
+        })
+
+    } catch (error) {
+        if(error instanceof AuthError){
+            switch (error.type) {
+                case "CredentialsSignin":
+                    return { error: "Ошибка доступа" }
+                default:
+                    return { error: "Упс, что-то пошло не так!" }
+            }
+        }   
+    }
 
     return { success: "Аккаунт был создан!" };
-    
 }

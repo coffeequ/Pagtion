@@ -9,6 +9,7 @@ import Link from "next/link";
 import { User } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useEffect } from "react";
 
 export default function Navbar(){
     
@@ -17,6 +18,10 @@ export default function Navbar(){
     const { status, data } = useSession();
 
     const userImage = data?.user?.image;
+
+    useEffect(() => {
+        
+    }, [])
 
     return(
         <div className= {cn("z-50 bg-background dark:bg-[#1F1F1F] fixed top-0 grid grid-cols-5 gap-1 items-center w-full p-2 pt-3", scrolled && "shadow-sm bg-background/55 backdrop-blur-md")}>

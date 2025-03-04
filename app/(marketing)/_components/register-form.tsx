@@ -8,6 +8,10 @@ import { useState, useTransition } from "react"
 import { RegisterSchema } from "@/schemas"
 import { Input } from "@/components/ui/input"
 
+import { redirect } from "next/navigation"
+
+import { useRouter } from "next/navigation";
+
 import {
     Form,
     FormControl,
@@ -20,11 +24,14 @@ import { Button } from "@/components/ui/button"
 import { FormError } from "./form-error"
 import { FormSucces } from "./form-succes"
 import register from "@/actions/register"
+import { signIn } from "next-auth/react"
+
 
 export default function RegisterForm(){
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPading, startTransition] = useTransition();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof RegisterSchema>>({
         resolver: zodResolver(RegisterSchema),
@@ -39,11 +46,25 @@ export default function RegisterForm(){
         setError("");
         setSuccess("");
 
-        startTransition(() => {
-            register(values).then((data) => {
-                setError(data.error);
-                setSuccess(data.success);
+        startTransition(async () => {
+            const result = await register(values);
+            if(result.error){
+                setError(result.error);
+                return;
+            }
+
+            const signInResult = await signIn("credentials", {
+                email: values.email,
+                name: values.name,
+                password: values.password
             });
+
+            if(signInResult?.error){
+                setError("Ошибка при авторизации");
+                return;
+            }
+
+            router.push("/documents");
         })
     }
 
@@ -61,7 +82,7 @@ export default function RegisterForm(){
                                     <Input
                                     {...field}
                                     disabled={isPading}
-                                    placeholder="Савва"
+                                    placeholder="Мое имя..."
                                     />
                                 </FormControl>
                                 <FormMessage/>
@@ -92,7 +113,7 @@ export default function RegisterForm(){
                                     <Input
                                     {...field}
                                     disabled={isPading}
-                                    placeholder="123"
+                                    placeholder="Очень секретный пароль"
                                     type="password"
                                     />
                                 </FormControl>
@@ -107,6 +128,11 @@ export default function RegisterForm(){
                     </Button>
                 </form>
             </Form>
+            <div className="flex justify-center mt-2">
+                    <Button variant="link" onClick={() => redirect("/login")}>
+                        У меня уже есть аккаунт!
+                </Button>
+            </div>
             <hr className="w-48 h-1 mx-auto my-2 bg-gray-200 border-0 rounded-sm md:my-4 dark:bg-gray-500"/>
             <Button variant="ghost" className="mt-2" disabled={isPading}>
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="text-current h-5 w-5 opacity-90">

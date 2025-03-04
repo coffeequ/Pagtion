@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState, useTransition } from "react"
-import { useSearchParams } from "next/navigation"
+import { redirect, useSearchParams } from "next/navigation"
 
 import { LoginSchema } from "@/schemas"
 import { Input } from "@/components/ui/input"
@@ -24,10 +24,11 @@ import { FormError } from "./form-error"
 import { FormSucces } from "./form-succes"
 import login from "@/actions/login"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
-import { Mail } from "lucide-react"
+
 
 export default function LoginForm(){
     const searchParams = useSearchParams();
+
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Почты различаются!" : "";
 
     const [error, setError] = useState<string | undefined>("");
@@ -105,6 +106,11 @@ export default function LoginForm(){
                     </Button>
                 </form>
             </Form>
+            <div className="flex justify-center mt-2">
+                <Button variant="link" onClick={() => redirect("/register")}>
+                    Нет аккаунта? Попробуйте создать его!
+                </Button>
+            </div>
             <hr className="w-48 h-1 mx-auto my-2 bg-gray-200 border-0 rounded-sm md:my-4 dark:bg-gray-500"/>
             <Button variant="ghost" className="mt-2" onClick={() => onClick("google")}>
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="text-current h-5 w-5 opacity-90">
@@ -112,10 +118,10 @@ export default function LoginForm(){
                 </svg>
                 Войти с помощью Google
             </Button>
-            <Button variant="ghost" className="mt-2" onClick={() => onClick("mail")}>
+            {/* <Button variant="ghost" className="mt-2" onClick={() => onClick("mail")}>
                 <Mail/>
                 Войти с помощью mail
-            </Button>
+            </Button> */}
         </div>
     )
 }
