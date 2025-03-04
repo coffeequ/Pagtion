@@ -8,10 +8,13 @@ import { redirect, useRouter } from "next/navigation";
 
 import { createDocument } from "@/actions/createDocument";
 import { useSession } from "next-auth/react";
+import useRefreshStore from "@/hooks/use-refresh";
 
 export default function DocumentPage(){
     
     const router = useRouter();
+
+    const { triggerRefresh } = useRefreshStore();
 
     const { data } = useSession();
 
@@ -26,11 +29,16 @@ export default function DocumentPage(){
     }
 
     function onCreate(){
+        debugger
         if(!userId){
             throw new Error("Не найден id пользователя!");
         }
-        const promise = create("Untitled", userId).then((documentId) => router.push(`/documents/${documentId.id}`));
-        
+
+        const promise = create("Untitled", userId).then((documentId) => {
+            triggerRefresh();
+            router.push(`/documents/${documentId.id}`)
+        });
+
         toast.promise(promise, {
             loading: "Создание новой заметки...",
             success: "Новая заметка создана!",
