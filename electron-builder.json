@@ -1,13 +1,15 @@
 {
-    "appId": "com.pagtion.app",
+    "appId": "com.pagtion.vercel.app",
+    "files": ["dist-electron"],
+    "icon": "/public/ppl.png",
     "mac":{
         "target": "dmg"
     },
     "linux":{
-        "target": "AppImage",
-        "category": "Utility"
+        "target": "appImage",
+        "category": "utility"
     },
     "win":{
-        "target": ["portable", "msi"]
+        "target": ["portable, msi"]
     }
 }
