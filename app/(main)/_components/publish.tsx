@@ -79,7 +79,7 @@ export default function Publish({ initialData, refresh } : IPublishProps) {
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant="ghost">
-                    Опубликовать
+                    Поделиться
                     {
                         initialData.isPublished && (
                             <Globe className="text-sky-500 w-4 h-4 ml-2" />

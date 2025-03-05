@@ -24,7 +24,7 @@ export default function DocumentIdPage(){
 
     const { url, setCoverImage } = useCoverImage();
 
-    const { data } = useSession();
+    const { data, status } = useSession();
 
     const userId = data?.user?.id;
 
@@ -45,8 +45,10 @@ export default function DocumentIdPage(){
                 setCoverImage("");
             }
         }
-        fetchDocument();
-    }, [documentId as string]);
+        if(status !== "loading"){
+            fetchDocument();
+        }
+    }, [documentId as string, userId, status]);
 
     const onChangeTitle = useCallback((title: string) => {
         if(title === ""){
