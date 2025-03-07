@@ -6,6 +6,7 @@ import {
     DEFAULT_LOGIN_REDIRECT,
     apiAuthPrefix,
     authRoutes,
+    apiEdgePrefix
 } from "@/routes"
 import { NextResponse } from "next/server";
 
@@ -15,13 +16,12 @@ export default auth((req) => {
     const { nextUrl } = req;
     const isLogginIn = !!req.auth;
 
-    const isApiAuthRoute = apiAuthPrefix.includes(nextUrl.pathname);
+    const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+    const isApiEdgeRoute = nextUrl.pathname.startsWith(apiEdgePrefix);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    console.log(isApiAuthRoute, nextUrl.pathname);
-
-    if(isApiAuthRoute){
-        return NextResponse.redirect(new URL("/login", nextUrl));;
+    if(isApiAuthRoute || isApiEdgeRoute){
+        return;
     }
 
     if(isAuthRoute){
