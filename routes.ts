@@ -9,7 +9,10 @@ export const authRoutes =[
     "/error",
 ]
 
-export const apiAuthPrefix = "/api/auth";
+export const apiAuthPrefix = [
+    "/api/auth",
+    "/api/edgestore"
+]
 
 export const DEFAULT_LOGIN_REDIRECT = "/documents";
 
