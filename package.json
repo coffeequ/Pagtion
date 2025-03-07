@@ -2,15 +2,11 @@
   "name": "pagtion",
   "version": "0.1.0",
   "private": true,
-  "main": "electron/main.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "electron": "electron .",
-    "app:dir": "electron-builder --dir",
-    "app:dist": "electron-builder"
+    "lint": "next lint"
   },
   "dependencies": {
     "-": "^0.0.1",

@@ -11,7 +11,7 @@ import getId from "@/actions/idDocument";
 import { Document } from "@prisma/client";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";
-import { redirect, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 export default function DocumentIdPage(){
