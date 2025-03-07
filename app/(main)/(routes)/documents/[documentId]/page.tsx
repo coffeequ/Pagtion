@@ -99,7 +99,7 @@ export default function DocumentIdPage(){
     }
     
     return(
-        <div className="pb-40">
+        <div className="pb-40 dark:bg-[#1F1F1F]">
             <Cover key={url} url={url} />
             <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
                 <Toolbar initialData = { document } onTitleChange={onChangeTitle} />

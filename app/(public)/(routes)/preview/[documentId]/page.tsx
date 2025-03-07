@@ -11,7 +11,7 @@ import getId from "@/actions/idDocument";
 import { Document } from "@prisma/client";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 export default function DocumentIdPage(){
@@ -24,18 +24,13 @@ export default function DocumentIdPage(){
 
     const { url, setCoverImage } = useCoverImage();
 
-    const { data, status } = useSession();
-
-    const userId = data?.user?.id;
+    const { status } = useSession();
 
     const [document, setDocument] = useState<Document>();
 
     useEffect(() => {
         async function fetchDocument(){
-            if(!userId){
-                throw new Error("Не найден id пользователя");
-            };
-            const document = await getId(documentId as string, userId);
+            const document = await getId(documentId as string);
             setDocument(document);
 
             if(document.coverImage){
@@ -48,7 +43,7 @@ export default function DocumentIdPage(){
         if(status !== "loading"){
             fetchDocument();
         }
-    }, [documentId as string, userId, status]);
+    }, [documentId as string, status]);
 
     const onChangeTitle = useCallback((title: string) => {
         if(title === ""){
@@ -93,7 +88,7 @@ export default function DocumentIdPage(){
     }
     
     return(
-        <div className="pb-40">
+        <div className="pb-40 dark:bg-[#1F1F1F]">
             <Cover preview key={url} url={url} />
             <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
                 <Toolbar preview initialData = { document } onTitleChange={onChangeTitle} />

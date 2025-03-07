@@ -1,7 +1,6 @@
 
 export const publicRoutes = [
     "/",
-    "/preview/:documentId",
 ];
 
 export const authRoutes =[

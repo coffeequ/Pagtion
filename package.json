@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "electron": "electron ."
+    "electron": "electron .",
+    "app:dir": "electron-builder --dir",
+    "app:dist": "electron-builder"
   },
   "dependencies": {
     "-": "^0.0.1",
@@ -58,8 +60,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "electron": "^34.2.0",
-    "electron-builder": "^25.1.8",
     "eslint": "^9",
     "eslint-config-next": "15.1.2",
     "postcss": "^8",
