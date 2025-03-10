@@ -3,7 +3,7 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendPasswordResetEmail = async(email: string, token: string) => {
-    const resetLink = `http://pagtion-vercel-app/new-password?token=${token}`;
+    const resetLink = `https://pagtion-vercel-app/new-password?token=${token}`;
 
     await resend.emails.send({
         from: "onboarding@resend.dev",
@@ -18,7 +18,7 @@ export const sendPasswordResetEmail = async(email: string, token: string) => {
 }
 
 export const sendVerificationEmail = async (email: string, token: string) => {
-    const confirmLink = `http://pagtion-vercel-app/new-verification?token=${token}`;
+    const confirmLink = `https://pagtion-vercel-app/new-verification?token=${token}`;
 
     await resend.emails.send({
         from: "onboarding@resend.dev",

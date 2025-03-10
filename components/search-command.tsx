@@ -43,7 +43,7 @@ export default function SearchCommand(){
         }
         
         fetchDocument();
-    }, []);
+    }, [isOpen]);
 
     useEffect(() => {
         const down = (e: KeyboardEvent) =>{
