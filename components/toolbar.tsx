@@ -102,7 +102,7 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
                 {
                     !icon && !preview && (
                         <IconPicker asChild onChange={onIconSelect}>
-                            <Button className="text-muted-foreground text-xs" variant="outline">
+                            <Button className="text-muted-foreground text-xs" variant="outline" size="sm">
                                 <Smile className="h-4 w-4 mr-2" />
                                 Добавить иконку
                             </Button>
@@ -112,7 +112,7 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
                 {
                     
                     !coverImage.url && !preview && (
-                        <Button onClick={coverImage.onOpen} className="text-muted-foreground text-xs" variant="outline">
+                        <Button onClick={coverImage.onOpen} className="text-muted-foreground text-xs" variant="outline" size="sm">
                             <ImageIcon className="h-4 w-4 mr-2"/>
                             Добавить обложку
                         </Button>

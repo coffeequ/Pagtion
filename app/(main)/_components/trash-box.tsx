@@ -89,7 +89,7 @@ export default function TrashBox(){
     }
 
     return(
-        <div className="text-sm border ml-1">
+        <div className="text-sm border ml-1 bg-secondary">
             <div className="flex items-center gap-x-1 p-2">
                 <Search className="h-4 w-4"/>
                 <Input value={search} onChange={(e) => setSearch(e.target.value)} className="h-7 px-2 focus-visible:ring-transparent bg-secondary" placeholder="Поиск по наимнованию страницы" />
