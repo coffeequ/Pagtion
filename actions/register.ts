@@ -7,8 +7,8 @@ import { prisma } from "@/lib/prisma";
 import { RegisterSchema } from "@/schemas";
 
 import { getUserByEmail } from "@/actions/user"
-import { signIn } from "next-auth/react";
-import { AuthError } from "next-auth";
+import { generateVerificationToken } from "@/lib/token";
+import { sendVerificationEmail } from "@/lib/mail";
 
 
 export default async function register(values: z.infer<typeof RegisterSchema>){
@@ -36,24 +36,9 @@ export default async function register(values: z.infer<typeof RegisterSchema>){
         }
     });
 
-    
-    try {
-        await signIn("credentials", {
-            email,
-            name,
-            hashedPassword,
-        })
+    const verificationToken = await generateVerificationToken(email);
 
-    } catch (error) {
-        if(error instanceof AuthError){
-            switch (error.type) {
-                case "CredentialsSignin":
-                    return { error: "Ошибка доступа" }
-                default:
-                    return { error: "Упс, что-то пошло не так!" }
-            }
-        }   
-    }
+    await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
-    return { success: "Аккаунт был создан!" };
+    return { success: "Код подтверждения отправлен на почту!" };
 }

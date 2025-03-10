@@ -27,7 +27,7 @@ export default function Cover({ preview, url } : ICoverProps){
 
     const {setCoverImage, onReplace} = useCoverImage();
 
-    console.log(url);
+    //console.log(url);
 
     async function onRemove () {
         if(url){

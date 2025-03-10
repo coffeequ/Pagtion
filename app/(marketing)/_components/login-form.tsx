@@ -24,6 +24,7 @@ import { FormError } from "./form-error"
 import { FormSucces } from "./form-succes"
 import login from "@/actions/login"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
+import Link from "next/link"
 
 
 export default function LoginForm(){
@@ -95,6 +96,11 @@ export default function LoginForm(){
                                     type="password"
                                     />
                                 </FormControl>
+                                <Button size="sm" variant="link" asChild className="px-0 font-normal">
+                                    <Link href="/reset">
+                                        Забыл пароль
+                                    </Link>
+                                </Button>
                                 <FormMessage/>
                             </FormItem>
                         )} />
