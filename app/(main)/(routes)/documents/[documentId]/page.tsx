@@ -34,7 +34,7 @@ export default function DocumentIdPage(){
             if(!data?.user?.id){
                 throw new Error("Не найден id пользователя");
             };
-            console.log(data.user.id);
+            //console.log(data.user.id);
             const document = await getId(documentId as string, data.user.id);
             setDocument(document);
 

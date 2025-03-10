@@ -22,6 +22,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }
   },
   callbacks: {
+    async signIn({ user, account }){
+
+      //Вход через сторонние провайдеры (google и тд)
+      if(account?.provider !== "credentials"){
+        return true;
+      }
+
+      const existingUser = await getUserById(user.id!);
+      
+      //предотвращать вход без подтверждения почты
+      if(!existingUser?.emailVerified){
+        return false;
+      }
+      
+      return true;
+    },
     async session({ token, session }){
       if(token.sub && session.user){
         session.user.id = token.sub;

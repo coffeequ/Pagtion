@@ -21,3 +21,14 @@ export const RegisterSchema = z.object({
     })
 });
 
+export const ResetSchema = z.object({
+    email: z.string().email({
+        message: "Введите почту"
+    })
+});
+
+export const NewPasswordSchema = z.object({
+    password: z.string().min(6, {
+        message: "Пароль должен состоять минимум из 6 символов"
+    })
+});

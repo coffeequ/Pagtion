@@ -10,8 +10,6 @@ import { Input } from "@/components/ui/input"
 
 import { redirect } from "next/navigation"
 
-import { useRouter } from "next/navigation";
-
 import {
     Form,
     FormControl,
@@ -24,14 +22,12 @@ import { Button } from "@/components/ui/button"
 import { FormError } from "./form-error"
 import { FormSucces } from "./form-succes"
 import register from "@/actions/register"
-import { signIn } from "next-auth/react"
 
 
 export default function RegisterForm(){
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPading, startTransition] = useTransition();
-    const router = useRouter();
 
     const form = useForm<z.infer<typeof RegisterSchema>>({
         resolver: zodResolver(RegisterSchema),
@@ -47,24 +43,10 @@ export default function RegisterForm(){
         setSuccess("");
 
         startTransition(async () => {
-            const result = await register(values);
-            if(result.error){
-                setError(result.error);
-                return;
-            }
-
-            const signInResult = await signIn("credentials", {
-                email: values.email,
-                name: values.name,
-                password: values.password
+            await register(values).then((item) => {
+                setError(item.error);
+                setSuccess(item.success);
             });
-
-            if(signInResult?.error){
-                setError("Ошибка при авторизации");
-                return;
-            }
-
-            router.push("/documents");
         })
     }
 
