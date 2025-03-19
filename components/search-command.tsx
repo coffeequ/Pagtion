@@ -39,6 +39,7 @@ export default function SearchCommand(){
                 throw new Error("Не найден id пользователя");
             }
             const data = await searchDocument(userId);
+            console.log(data);
             setDocuments(data);
         }
         
@@ -60,8 +61,15 @@ export default function SearchCommand(){
     }, [toggle]);
 
     function onSelect(id: string): void {
-        router.push(`/documents/${id}`);
-
+        console.log(id);
+        const idDocument = id.indexOf(" - ");
+        if(idDocument < 0){
+            router.push("/documents");
+            throw new Error("Ошибка...");
+        }
+        const resultDoumentId = id.slice(0, idDocument);
+        console.log(resultDoumentId);
+        router.push(`/documents/${resultDoumentId}`);
         onClose();
     }
     
@@ -79,7 +87,7 @@ export default function SearchCommand(){
                 {
                         documents?.map((document) => (
                             // value={`${document._id} - ${document.title}`}
-                            <CommandItem key = {document.id} value={`${document.id}`} title={document.title} onSelect={onSelect}>
+                            <CommandItem key = {document.id} value={`${document.id} - ${document.title}`} title={document.title} onSelect={onSelect}>
                                 {
                                     document.icon ? (
                                         <p className="mr-2 text-[18px]">
