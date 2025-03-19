@@ -2,6 +2,8 @@
   "name": "pagtion",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
+  "type": "commonjs",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

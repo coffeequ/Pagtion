@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     domains: [
       "files.edgestore.dev"
     ]
-  }
+  },
 };
 
 export default nextConfig;

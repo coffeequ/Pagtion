@@ -12,7 +12,7 @@ import { sendVerificationEmail } from "@/lib/mail";
 
 export default async function login(values: z.infer<typeof LoginSchema>){
     const validatedFields = LoginSchema.safeParse(values);
-
+    
     if(!validatedFields.success){
         return { error: "Не правильно заполнены поля!" };
     }
@@ -21,12 +21,11 @@ export default async function login(values: z.infer<typeof LoginSchema>){
 
     const existingUser = await getUserByEmail(email);
 
-    //console.log(existingUser);
-
     if(!existingUser || !existingUser.email || !existingUser.password){
         return { error: "Аккаунт с почтой не зарегистрирован!!" }
     }
-
+    
+    //TO-DO: Спросить, нужна ли вообще подтверждение почты или нет?
     if(!existingUser.emailVerified){
         const verificationToken = await generateVerificationToken(existingUser.email);
         

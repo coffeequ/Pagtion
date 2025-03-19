@@ -37,5 +37,5 @@ export default { providers:
       clientId: process.env.MAIL_CLIENT_ID,
       clientSecret: process.env.MAIL_CLIENT_SECRET,
     })
-],
+]
 } satisfies NextAuthConfig

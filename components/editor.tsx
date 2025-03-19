@@ -3,7 +3,7 @@
 import{
     BlockNoteEditor,
     locales,
-    PartialBlock,
+    PartialBlock
 } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react"
 import { BlockNoteView } from "@blocknote/mantine"
@@ -59,5 +59,3 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
 }
 
 export default Editor;
-
-
