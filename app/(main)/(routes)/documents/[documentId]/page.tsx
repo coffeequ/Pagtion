@@ -26,7 +26,6 @@ export default function DocumentIdPage(){
 
     const { data } = useSession();
 
-
     const [document, setDocument] = useState<Document>();
 
     useEffect(() => {

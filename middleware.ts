@@ -16,11 +16,17 @@ export default auth((req) => {
     const { nextUrl } = req;
     const isLogginIn = !!req.auth;
 
-    const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+    const isApiAuthPrefix = nextUrl.pathname.startsWith(apiAuthPrefix);
     const isApiEdgeRoute = nextUrl.pathname.startsWith(apiEdgePrefix);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    if(isApiAuthRoute || isApiEdgeRoute){
+    console.log("Текущая ссылка: ", nextUrl);
+    console.log("Авторизирован ли пользователь:", isLogginIn);
+    console.log("isApiRoute: ", isApiAuthPrefix);
+    console.log("isApiEdgeRoute", isApiEdgeRoute);
+    console.log("isAuthRoute:", isApiAuthPrefix);
+
+    if(isApiAuthPrefix || isApiEdgeRoute){
         return;
     }
 
@@ -28,7 +34,7 @@ export default auth((req) => {
         if(isLogginIn){
             return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
-        return;
+        return
     }
 
     return;

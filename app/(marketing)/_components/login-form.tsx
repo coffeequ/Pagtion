@@ -124,10 +124,6 @@ export default function LoginForm(){
                 </svg>
                 Войти с помощью Google
             </Button>
-            {/* <Button variant="ghost" className="mt-2" onClick={() => onClick("mail")}>
-                <Mail/>
-                Войти с помощью mail
-            </Button> */}
         </div>
     )
 }
