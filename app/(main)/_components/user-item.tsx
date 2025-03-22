@@ -65,7 +65,9 @@ export default function UserItem(){
                 </div>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem asChild className="w-full cursor-pointer text-muted-foreground">
-                    <Button variant="ghost" onClick={() => { signOut() }}>
+                    <Button variant="ghost" onClick={() => { signOut({
+                        redirectTo: "/"
+                    }) }}>
                         Выйти
                     </Button>
                 </DropdownMenuItem>
