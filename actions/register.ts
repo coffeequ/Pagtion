@@ -8,7 +8,7 @@ import { RegisterSchema } from "@/schemas";
 
 import { getUserByEmail } from "@/actions/user"
 import { generateVerificationToken } from "@/lib/token";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendPasswordConfirmEmail } from "@/lib/mail";
 
 
 export default async function register(values: z.infer<typeof RegisterSchema>){
@@ -38,7 +38,7 @@ export default async function register(values: z.infer<typeof RegisterSchema>){
 
     const verificationToken = await generateVerificationToken(email);
 
-    await sendVerificationEmail(verificationToken.email, verificationToken.token);
+    sendPasswordConfirmEmail(verificationToken.email, verificationToken.token);
 
     return { success: "Код подтверждения отправлен на почту!" };
 }
