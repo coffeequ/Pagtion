@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 
 function emailConfirm(email: string, token: string){
 
-    const confirmLink = `https://pagtion-vercel-app/new-verification?token=${token}`;
+    const confirmLink = `https://pagtion.vercel.app/new-verification?token=${token}`;
 
     return {
         from: "pagtion@yandex.ru",
@@ -29,7 +29,7 @@ function emailConfirm(email: string, token: string){
 }
 
 function resetPassword(email: string, token: string){
-    const resetLink = `https://pagtion-vercel-app/new-password?token=${token}`;
+    const resetLink = `https://pagtion.vercel.app/new-password?token=${token}`;
 
     return {
         from: "pagtion@yandex.ru",
