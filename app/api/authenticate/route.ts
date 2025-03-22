@@ -3,7 +3,7 @@ import { LoginSchema } from "@/schemas";
 import bcrypt from "bcryptjs";
 import * as z from "zod";
 
-export async function POST (req: Request, res: Response){
+export async function POST (req: Request){
 
     const body: z.infer<typeof LoginSchema> = await req.json();
 
