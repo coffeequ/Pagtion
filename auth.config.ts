@@ -1,7 +1,6 @@
 import type { NextAuthConfig } from "next-auth"
 import Google from "next-auth/providers/google"
 import Yandex from "next-auth/providers/yandex"
-import MailRu from "next-auth/providers/mailru"
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "./schemas";
 import { getUserByEmail } from "./actions/user";
@@ -32,11 +31,6 @@ export default { providers:
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-    
-    MailRu({
-      clientId: process.env.MAIL_CLIENT_ID,
-      clientSecret: process.env.MAIL_CLIENT_SECRET,
     }),
 
     Yandex({

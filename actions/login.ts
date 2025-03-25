@@ -25,7 +25,6 @@ export default async function login(values: z.infer<typeof LoginSchema>){
         return { error: "Аккаунт с почтой не зарегистрирован!!" }
     }
     
-    //TO-DO: Спросить, нужна ли вообще подтверждение почты или нет?
     if(!existingUser.emailVerified){
         const verificationToken = await generateVerificationToken(existingUser.email);
         

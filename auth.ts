@@ -48,7 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if(!existingUser) return token;
 
       return token;
-    }
+    },
   },
   session: { strategy: "jwt" },
   adapter: PrismaAdapter(prisma),

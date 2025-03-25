@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react"
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { redirect, useSearchParams } from "next/navigation"
 
 import { LoginSchema } from "@/schemas"
@@ -45,9 +45,12 @@ export default function LoginForm(){
     });
 
     const onClick = (provider: "google" | "yandex") => {
-        signIn(provider, {
-            redirectTo: DEFAULT_LOGIN_REDIRECT
-        });
+        const handleSignin = async () => {
+            await signIn(provider, {
+                redirectTo: DEFAULT_LOGIN_REDIRECT
+            });
+        }
+        handleSignin();
     }
 
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
