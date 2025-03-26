@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react"
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect, useState, useTransition } from "react"
+import { useState, useTransition } from "react"
 import { redirect, useSearchParams } from "next/navigation"
 
 import { LoginSchema } from "@/schemas"

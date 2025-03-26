@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { getSession, signOut } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
 export default function ElectronRedirest(){
     const [redirectUrl, setRedirectUrl] = useState("");

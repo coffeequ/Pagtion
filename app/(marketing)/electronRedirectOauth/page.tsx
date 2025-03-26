@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 
-export default function page(){
+export default function Page(){
 
     const onClickRedirect = async () => {
         await signIn("google", {
