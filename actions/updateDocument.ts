@@ -12,7 +12,7 @@ interface IUpdateProps {
     isPublished?: boolean
 }
 
-export default async function update({ documentId, userId, title, content, coverImage, icon, isPublished} : IUpdateProps){
+export default async function update({ documentId, userId, title, content, coverImage, icon, isPublished } : IUpdateProps){
     const exsitingDocument = await prisma.document.findFirst({
         where:{
             userId,

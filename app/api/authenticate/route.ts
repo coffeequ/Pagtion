@@ -22,7 +22,7 @@ export async function POST (req: Request){
     const user = await getUserByEmail(email);
     
     if(!user || !user.password) return new Response(JSON.stringify({ error: "Ошибка авторизации" }), {
-        status: 200,
+        status: 404,
     });
     
     const passwordMatch = await bcrypt.compare(password, user.password);          
@@ -34,6 +34,14 @@ export async function POST (req: Request){
                 "Content-Type": "application/json"
             }
         });
+    }
+    else{
+        return new Response(JSON.stringify({error: "Ошибка авторизации"}), {
+            status: 404,
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
     }
 
 };

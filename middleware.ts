@@ -30,16 +30,16 @@ export default auth((req) => {
         return;
     }
 
-    if(nextUrl.pathname.startsWith("/api/auth/callback?electron=true")){
-        console.log("Условие сработало!!!!!!");
-        if(nextUrl.searchParams.get("electron") === "true"){
-            const code = nextUrl.searchParams.get("code");
-            if(code){
-                const urlRedirect = `myapp://auth?code=${encodeURIComponent(code)}`;
-                return NextResponse.redirect(urlRedirect);
-            }
-        }
-    }
+    // if(nextUrl.pathname.startsWith("/api/auth/callback?electron=true")){
+    //     console.log("Условие сработало!!!!!!");
+    //     if(nextUrl.searchParams.get("electron") === "true"){
+    //         const code = nextUrl.searchParams.get("code");
+    //         if(code){
+    //             const urlRedirect = `myapp://auth?code=${encodeURIComponent(code)}`;
+    //             return NextResponse.redirect(urlRedirect);
+    //         }
+    //     }
+    // }
 
     if(isAuthRoute){
         if(isLogginIn){

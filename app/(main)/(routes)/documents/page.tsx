@@ -29,7 +29,6 @@ export default function DocumentPage(){
     }
 
     function onCreate(){
-        debugger
         if(!userId){
             throw new Error("Не найден id пользователя!");
         }
