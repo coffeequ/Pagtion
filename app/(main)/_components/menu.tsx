@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { archived } from "@/actions/ArchiveDocument";
 import { useSession } from "next-auth/react";
+import useRefreshStore from "@/hooks/use-refresh";
 
 interface IMenuProps {
     documentId: string;
@@ -20,21 +21,24 @@ export default function Menu({documentId} : IMenuProps) {
 
     const router = useRouter();
 
+    const triggerRefresh = useRefreshStore((state) => state.triggerRefresh);
+
     const { data } = useSession();
 
     const userName = data?.user?.name;
 
-    const archive = archived;
+    const userId = data?.user?.id;
 
     function onArchive() {
-        const promise = archive(documentId);
+        const promise = archived(documentId, userId).then(() => {
+            triggerRefresh();
+        });
 
         toast.promise(promise, {
             loading: "Перемещение в мусорку...",
             success: "Страница была перемещена в корзину!",
             error: "Перемещение не удалось."
         })
-
         router.push("/documents");
     }
 

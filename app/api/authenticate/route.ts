@@ -7,7 +7,7 @@ export async function POST (req: Request){
 
     const body: z.infer<typeof LoginSchema> = await req.json();
 
-    console.log(body);
+    //console.log(body);
 
     const validatedFields = LoginSchema.safeParse(body);
 
