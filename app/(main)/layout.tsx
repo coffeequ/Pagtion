@@ -6,7 +6,7 @@ import Navigation from "./_components/Navigation";
 import SearchCommand from "@/components/search-command";
 import { useSession } from "next-auth/react";
 
-export default function MainLayot({ children } : { children:React.ReactNode }){
+export default function MainLayot({ children } : { children : React.ReactNode }){
     
     const { status } = useSession();
     

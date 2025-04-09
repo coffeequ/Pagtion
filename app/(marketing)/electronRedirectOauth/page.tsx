@@ -17,7 +17,6 @@ function PageContent(){
 
     useEffect(() => {
         const getProvider = params.get("selectProviders");
-        //console.log(getProvider);
         if(!getProvider){
             return;
         }

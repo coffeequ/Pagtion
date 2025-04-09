@@ -1,3 +1,5 @@
+"use server"
+
 import { prisma } from "@/lib/prisma";
 
 export async function getUserByEmail(email: string){
@@ -6,7 +8,7 @@ export async function getUserByEmail(email: string){
             where:{
                 email
             }
-        })
+        });
         return user;
     } catch {
         return null;

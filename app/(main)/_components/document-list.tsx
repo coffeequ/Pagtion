@@ -43,6 +43,7 @@ export default function DocumentList({ parentDocumentId, level = 0} : DocumentLi
         if(!userId){
             throw new Error("Пользователь не был найден!");
         }
+        console.log(userId, parentDocumentId);
         const data = await sidebar(userId, parentDocumentId);
         setDocuments(data);
     }
