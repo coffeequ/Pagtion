@@ -29,12 +29,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return true;
       }
 
-      const existingUser = await getUserById(user.id!);
+      // const existingUser = await getUserById(user.id!);
       
-      //предотвращать вход без подтверждения почты
-      if(!existingUser?.emailVerified){
-        return false;
-      }
+      // //предотвращать вход без подтверждения почты
+      // if(!existingUser?.emailVerified){
+      //   return false;
+      // }
       
       return true;
     },

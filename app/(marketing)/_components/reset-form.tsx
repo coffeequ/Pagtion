@@ -4,7 +4,6 @@ import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState, useTransition } from "react"
-import { redirect } from "next/navigation"
 
 import { ResetSchema } from "@/schemas"
 import { Input } from "@/components/ui/input"
@@ -80,7 +79,7 @@ export default function ResetForm(){
                 </form>
             </Form>
             <div className="flex justify-center mt-2">
-                <Button variant="link" onClick={() => redirect("/login")}>
+                <Button variant="link" onClick={() => {window.close()}}>
                     Перейти к авторизации
                 </Button>
             </div>

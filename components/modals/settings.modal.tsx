@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { useSettings } from "@/hooks/use-settings";
 import { Label } from "@/components/ui/label";
 import { ModeToggle } from "@/components/mode-toggle";
-//import ConfirmMail from "@/components/confirm-mail"
+import ConfirmMail from "@/components/confirm-mail"
 
 export default function SettingsModal(){
     const settings = useSettings();
@@ -28,14 +28,14 @@ export default function SettingsModal(){
                     </div>
                     <ModeToggle/>
                 </div>
-                {/* <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between">
                     <div className="flex flex-col gap-y-1">
                         <Label>
                             Подтверждение почты
                         </Label>
-                        <ConfirmMail/>
                     </div>
-                </div> */}
+                    <ConfirmMail/>
+                </div>
             </DialogContent>
         </Dialog>
     );

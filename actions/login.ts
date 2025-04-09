@@ -25,13 +25,13 @@ export default async function login(values: z.infer<typeof LoginSchema>){
         return { error: "Аккаунт с почтой не зарегистрирован!!" }
     }
     
-    if(!existingUser.emailVerified){
-        const verificationToken = await generateVerificationToken(existingUser.email);
+    // if(!existingUser.emailVerified){
+    //     const verificationToken = await generateVerificationToken(existingUser.email);
         
-        sendPasswordConfirmEmail(verificationToken.email, verificationToken.token);
+    //     sendPasswordConfirmEmail(verificationToken.email, verificationToken.token);
         
-        return {success: "Письмо с подверждением отправлено!"}
-    }
+    //     return {success: "Письмо с подверждением отправлено!"}
+    // }
 
     try {
         await signIn("credentials", {

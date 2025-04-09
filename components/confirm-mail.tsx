@@ -1,60 +1,53 @@
-// "use client"
+"use client"
 
-// import { useSession } from "next-auth/react";
-// import { Button } from "./ui/button";
-// import { getUserByEmail } from "@/actions/user";
-// import { generateVerificationToken } from "@/lib/token";
-// import { sendPasswordConfirmEmail } from "@/lib/mail";
-// import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { Button } from "./ui/button";
+import { getUserByEmail } from "@/actions/user";
+import { generateVerificationToken } from "@/lib/token";
+import { sendPasswordConfirmEmail } from "@/lib/mail";
+import { useEffect, useState } from "react";
 
-// export default function ConfirmMail(){
+export default function ConfirmMail(){
 
-//     const { data } = useSession();
+    const { data } = useSession();
 
-//     const [statusMailVerified, setStatusMailVerified] = useState<boolean>();
+    const [statusMailVerified, setStatusMailVerified] = useState<boolean>();
 
-//     useEffect(() => {
-//         const checkEmailVerified = async () => {
-//             console.log("data: ", data);
-//             const existingUser = await getUserByEmail(data?.user?.email as string);
+    useEffect(() => {
+        console.log("Метод сработал");
 
-//             console.log('existingUser: ', existingUser);
+        const checkEmailVerified = async () => {
+            const existingUser = await getUserByEmail(data?.user?.email as string);
             
-//             if(!existingUser || !existingUser.email || !existingUser.password){
-            
-//                 setStatusMailVerified(true);
-            
-//                 console.log("почта подтверждена?: ", existingUser?.emailVerified);
-            
-//                 return;
-//             }
-//             else{
-//                 setStatusMailVerified(false);
-//             }
-//         }
-//         checkEmailVerified();
-//     }, [])
+            if(existingUser!.emailVerified){
+                setStatusMailVerified(true);
+            }
+            else{
+                setStatusMailVerified(false);
+            }
+        }
+        checkEmailVerified();
+    }, [])
 
-//     const onClick = async () => {
-//         const existingUser = await getUserByEmail(data?.user?.email as string);
-//         if(!existingUser || !existingUser.email || !existingUser.password){
-//             return;
-//         }
+    const onClick = async () => {
+        console.log("Отправка...");
+        const existingUser = await getUserByEmail(data?.user?.email as string);
             
-//         if(!existingUser.emailVerified){
-//             const verificationToken = await generateVerificationToken(existingUser.email);
-//             sendPasswordConfirmEmail(verificationToken.email, verificationToken.token);
-//             return;
-//         }
-//     }
+        if(!existingUser!.emailVerified){
+            const verificationToken = await generateVerificationToken(existingUser!.email!);
+            sendPasswordConfirmEmail(verificationToken.email, verificationToken.token);
+            console.log("Отправленно");
+            return;
+        }
 
-    
+        setStatusMailVerified(true);
+    }
 
-//     return (
-//         <div>
-//             <Button onClick={onClick} disabled={statusMailVerified}>
-//                 Подтвердить почту
-//             </Button>
-//         </div>
-//     );
-// }
+    return (
+        <div>
+            <Button onClick={onClick} disabled={statusMailVerified}>
+                Отправить письмо на почту
+            </Button>
+        </div>
+    );
+}
