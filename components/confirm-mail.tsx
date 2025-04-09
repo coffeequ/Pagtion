@@ -11,7 +11,7 @@ export default function ConfirmMail(){
 
     const { data } = useSession();
 
-    const [statusMailVerified, setStatusMailVerified] = useState<boolean>();
+    const [statusMailVerified, setStatusMailVerified] = useState<boolean>(true);
 
     useEffect(() => {
         console.log("Метод сработал");
@@ -21,9 +21,11 @@ export default function ConfirmMail(){
             
             if(existingUser!.emailVerified){
                 setStatusMailVerified(true);
+                return;
             }
             else{
                 setStatusMailVerified(false);
+                return;
             }
         }
         checkEmailVerified();
