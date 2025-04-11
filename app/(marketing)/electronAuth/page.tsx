@@ -14,7 +14,7 @@ export default function ElectronRedirest(){
                 const email = session.user.email;
                 const name = session.user.name;
                 const image = session.user.image;
-                const url = `myapp://auth?id=${encodeURIComponent(userId!)}&email=${encodeURIComponent(email!)}&name=${encodeURIComponent(name!)}&image=${encodeURIComponent(image!)}`;
+                const url = `pagtion://auth?id=${encodeURIComponent(userId!)}&email=${encodeURIComponent(email!)}&name=${encodeURIComponent(name!)}&image=${encodeURIComponent(image!)}`;
                 setRedirectUrl(url);
             }
         }
