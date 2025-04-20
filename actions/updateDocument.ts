@@ -37,6 +37,5 @@ export default async function update({ documentId, userId, title, content, cover
             isPublished
         }
     });
-    //revalidatePath(`/documents/${updateDocument.id}`);
     return updateDocument;
 }

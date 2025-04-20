@@ -110,7 +110,6 @@ export default function Toolbar({ initialData, preview, onTitleChange } : IToolb
                     )
                 }
                 {
-                    
                     !coverImage.url && !preview && (
                         <Button onClick={coverImage.onOpen} className="text-muted-foreground text-xs" variant="outline" size="sm">
                             <ImageIcon className="h-4 w-4 mr-2"/>

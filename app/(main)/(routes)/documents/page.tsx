@@ -49,7 +49,7 @@ export default function DocumentPage(){
         <div className="h-full flex flex-col items-center justify-center space-y-4">
             <h2 className="text-lg font-medium">Добро пожаловать {userData}!</h2>
             <Button onClick={onCreate}>
-                <PlusCircle className="h-4 w-4 mr-2"/>Создать первую заметку
+                <PlusCircle className="h-4 w-4 mr-2"/>Создать заметку
             </Button>
         </div>
     );

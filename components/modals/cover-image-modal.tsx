@@ -34,7 +34,6 @@ export default function CoverImageModal(){
 
     async function onChange(file?: File) {
         if(file){
-            debugger
             setIsSubmitting(true);
             setFile(file);
 

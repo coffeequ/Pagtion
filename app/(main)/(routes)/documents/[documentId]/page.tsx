@@ -13,6 +13,7 @@ import { Document } from "@prisma/client";
 import { useCoverImage } from "@/hooks/use-cover-image";
 import useRefreshStore from "@/hooks/use-refresh";
 import { redirect, useParams } from "next/navigation";
+import { Room } from "@/app/room";
 
 export default function DocumentIdPage(){
 
@@ -101,7 +102,9 @@ export default function DocumentIdPage(){
             <Cover key={url} url={url} />
             <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
                 <Toolbar initialData = { document } onTitleChange={onChangeTitle} />
-                <Editor onChange = {onChangeContent} initialContent = { document.content } />
+                <Room>
+                    <Editor onChange = {onChangeContent} initialContent = { document.content } />
+                </Room>
             </div>
         </div> 
     );

@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button"
 import { FormError } from "./form-error"
 import { FormSucces } from "./form-succes"
 import { reset } from "@/actions/reset"
+import { useRouter } from "next/navigation"
 
 
 
@@ -27,6 +28,8 @@ export default function ResetForm(){
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPading, startTransition] = useTransition();
+
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof ResetSchema>>({
         resolver: zodResolver(ResetSchema),
@@ -79,7 +82,7 @@ export default function ResetForm(){
                 </form>
             </Form>
             <div className="flex justify-center mt-2">
-                <Button variant="link" onClick={() => {window.close()}}>
+                <Button variant="link" onClick={() => {router.push("/login")}}>
                     Перейти к авторизации
                 </Button>
             </div>
