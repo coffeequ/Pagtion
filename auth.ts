@@ -28,13 +28,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if(account?.provider !== "credentials"){
         return true;
       }
-
-      // const existingUser = await getUserById(user.id!);
-      
-      // //предотвращать вход без подтверждения почты
-      // if(!existingUser?.emailVerified){
-      //   return false;
-      // }
       
       return true;
     },

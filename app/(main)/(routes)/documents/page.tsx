@@ -21,8 +21,6 @@ export default function DocumentPage(){
     const userId = data?.user?.id;
 
     const userData = data?.user?.name;
-    
-    const create = createDocument;
 
     if(!userId){
         redirect("/documents");
@@ -33,7 +31,7 @@ export default function DocumentPage(){
             throw new Error("Не найден id пользователя!");
         }
 
-        const promise = create("Untitled", userId).then((documentId) => {
+        const promise = createDocument("Untitled", userId).then((documentId) => {
             triggerRefresh();
             router.push(`/documents/${documentId.id}`)
         });
@@ -49,7 +47,7 @@ export default function DocumentPage(){
         <div className="h-full flex flex-col items-center justify-center space-y-4">
             <h2 className="text-lg font-medium">Добро пожаловать {userData}!</h2>
             <Button onClick={onCreate}>
-                <PlusCircle className="h-4 w-4 mr-2"/>Создать первую заметку
+                <PlusCircle className="h-4 w-4 mr-2"/>Создать заметку
             </Button>
         </div>
     );

@@ -14,9 +14,11 @@ import { useSession } from "next-auth/react";
 interface DocumentListProps{
     parentDocumentId?: string;
     level?: number;
+    collapse: () => void;
+    isMobile: boolean
 }
 
-export default function DocumentList({ parentDocumentId, level = 0} : DocumentListProps) {
+export default function DocumentList({ parentDocumentId, level = 0, collapse, isMobile} : DocumentListProps) {
 
     const shouldRefresh = useRefreshStore((state) => state.shouldRefresh);
 
@@ -43,7 +45,7 @@ export default function DocumentList({ parentDocumentId, level = 0} : DocumentLi
         if(!userId){
             throw new Error("Пользователь не был найден!");
         }
-        console.log(userId, parentDocumentId);
+        // console.log(userId, parentDocumentId);
         const data = await sidebar(userId, parentDocumentId);
         setDocuments(data);
     }
@@ -103,6 +105,8 @@ export default function DocumentList({ parentDocumentId, level = 0} : DocumentLi
                                 <DocumentList
                                     parentDocumentId={document.id}
                                     level={level + 1}
+                                    collapse={collapse}
+                                    isMobile={isMobile}
                                 />
                             )
                         }

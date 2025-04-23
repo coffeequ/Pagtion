@@ -14,8 +14,8 @@ export default function ConfirmMail(){
     const [statusMailVerified, setStatusMailVerified] = useState<boolean>(true);
 
     useEffect(() => {
-        console.log("Метод сработал");
-
+        // console.log("Метод сработал");
+        
         const checkEmailVerified = async () => {
             const existingUser = await getUserByEmail(data?.user?.email as string);
             
@@ -32,13 +32,13 @@ export default function ConfirmMail(){
     }, [])
 
     const onClick = async () => {
-        console.log("Отправка...");
+        // console.log("Отправка...");
         const existingUser = await getUserByEmail(data?.user?.email as string);
             
         if(!existingUser!.emailVerified){
             const verificationToken = await generateVerificationToken(existingUser!.email!);
             sendPasswordConfirmEmail(verificationToken.email, verificationToken.token);
-            console.log("Отправленно");
+            // console.log("Отправленно");
             return;
         }
 

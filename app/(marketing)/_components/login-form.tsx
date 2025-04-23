@@ -1,4 +1,5 @@
 "use client"
+
 import * as z from "zod"
 
 import { signIn } from "next-auth/react"
@@ -28,6 +29,7 @@ import Link from "next/link"
 
 
 export default function LoginForm(){
+    
     const searchParams = useSearchParams();
 
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Почты различаются!" : "";
