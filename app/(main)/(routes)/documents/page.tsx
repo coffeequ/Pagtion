@@ -21,8 +21,6 @@ export default function DocumentPage(){
     const userId = data?.user?.id;
 
     const userData = data?.user?.name;
-    
-    const create = createDocument;
 
     if(!userId){
         redirect("/documents");
@@ -33,7 +31,7 @@ export default function DocumentPage(){
             throw new Error("Не найден id пользователя!");
         }
 
-        const promise = create("Untitled", userId).then((documentId) => {
+        const promise = createDocument("Untitled", userId).then((documentId) => {
             triggerRefresh();
             router.push(`/documents/${documentId.id}`)
         });

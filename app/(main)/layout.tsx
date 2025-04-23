@@ -1,14 +1,13 @@
 "use client"
 
 import Spinner from "@/components/Spinner";
-import { redirect } from "next/navigation";
 import Navigation from "./_components/Navigation";
 import SearchCommand from "@/components/search-command";
 import { useSession } from "next-auth/react";
 
 export default function MainLayot({ children } : { children : React.ReactNode }){
     
-    const { status } = useSession();
+    const { status, update } = useSession();
     
     if(status === "loading"){
         return (
@@ -18,8 +17,8 @@ export default function MainLayot({ children } : { children : React.ReactNode })
         );
     }
 
-    if(status === "unauthenticated"){
-        return redirect("/");
+    if(status === 'unauthenticated'){
+        update();
     }
 
     return(

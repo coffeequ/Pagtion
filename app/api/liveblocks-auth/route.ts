@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     }
 
     const { status, body } = await liveblocks.identifyUser(user.id, { userInfo: {name: user.name, avatar: user.image} })
-
+    console.log({ status, body });
     return new Response(body, { status });
 }
 

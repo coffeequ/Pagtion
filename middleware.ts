@@ -7,7 +7,8 @@ import {
     DEFAULT_LOGIN_REDIRECT,
     apiAuthPrefix,
     authRoutes,
-    apiEdgePrefix
+    apiEdgePrefix,
+    publicRoutes
 } from "@/routes"
 import { NextResponse } from "next/server";
 
@@ -21,26 +22,9 @@ export default auth((req) => {
     const isApiEdgeRoute = nextUrl.pathname.startsWith(apiEdgePrefix);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    // console.log("Текущая ссылка: ", nextUrl);
-    // console.log("Авторизирован ли пользователь:", isLogginIn);
-    // console.log("isApiRoute: ", isApiAuthPrefix);
-    // console.log("isApiEdgeRoute", isApiEdgeRoute);
-    // console.log("isAuthRoute:", isApiAuthPrefix);
-
     if(isApiAuthPrefix || isApiEdgeRoute){
         return;
     }
-
-    // if(nextUrl.pathname.startsWith("/api/auth/callback?electron=true")){
-    //     console.log("Условие сработало!!!!!!");
-    //     if(nextUrl.searchParams.get("electron") === "true"){
-    //         const code = nextUrl.searchParams.get("code");
-    //         if(code){
-    //             const urlRedirect = `myapp://auth?code=${encodeURIComponent(code)}`;
-    //             return NextResponse.redirect(urlRedirect);
-    //         }
-    //     }
-    // }
 
     if(isAuthRoute){
         if(isLogginIn){

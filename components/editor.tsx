@@ -27,6 +27,7 @@ import { useTheme } from "next-themes";
 import { useDebounceCallback } from "usehooks-ts";
 import { useEffect, useMemo } from "react";
 import { useOthers } from "@liveblocks/react";
+import { useSelf } from "@liveblocks/react/suspense";
 
 interface IEditorProps{
     onChange: (value: string) => void;
@@ -40,12 +41,14 @@ function Editor({ onChange, initialContent, editable } : IEditorProps){
 
     const others = useOthers();
 
+    const test = useSelf((me) => me.info);
+
     const { edgestore } = useEdgeStore();
 
     const debouncedOnChange = useDebounceCallback(onChange, 200);
 
     useEffect(() => {
-      console.log(others);
+      console.log("others: ", others, "self: ", test);
     }, [])
 
     async function handleUpload(file: File){
