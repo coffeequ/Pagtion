@@ -5,7 +5,6 @@ import { Toaster } from "sonner"
 import ModalProvider from "@/components/providers/modal-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import { SessionProvider } from "next-auth/react";
-import { ProviderLb } from "@/components/providers/liveb-provider";
 import { auth } from "@/auth";
 
 // const geistSans = Geist({
@@ -48,8 +47,7 @@ export default async function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <body>
-      <ProviderLb>
-        <SessionProvider session={session}>
+      <SessionProvider session={session}>
             <EdgeStoreProvider>
               <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange storageKey="pagnotion-theme">
                 <Toaster position="bottom-center"/>
@@ -58,7 +56,6 @@ export default async function RootLayout({
               </ThemeProvider>
             </EdgeStoreProvider>
           </SessionProvider>
-        </ProviderLb>
       </body>
     </html>
   );
