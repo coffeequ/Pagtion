@@ -1,13 +1,10 @@
 "use server"
-
 import * as z from "zod"
 
 import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import { getUserByEmail } from "./user";
-import { revalidatePath } from "next/cache";
 
 export default async function login(values: z.infer<typeof LoginSchema>){
     const validatedFields = LoginSchema.safeParse(values);
@@ -29,7 +26,6 @@ export default async function login(values: z.infer<typeof LoginSchema>){
             email,
             password
         })
-        revalidatePath(DEFAULT_LOGIN_REDIRECT);
 
         return { success: "Код отправлен на почту" }
 

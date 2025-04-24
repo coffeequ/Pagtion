@@ -28,9 +28,10 @@ export default function ElectronRedirest(){
     }, [redirectUrl]);
 
     return (
-        <div>
-            <p>Авторизация прошла успешно!
-                <a href={redirectUrl || "#"}>Нажмите, чтобы перейти в приложение</a>
+        <div className="flex flex-col items-center justify-center">
+            <p className="text-center">Авторизация прошла успешно!
+                <br/>
+                <a href={redirectUrl || "#"} className="m-5 hover:underline">Нажмите, чтобы перейти в приложение</a>
             </p>
         </div>
     )

@@ -23,9 +23,9 @@ import {
 import { Button } from "@/components/ui/button"
 import { FormError } from "./form-error"
 import { FormSucces } from "./form-succes"
-import login from "@/actions/login"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import Link from "next/link"
+import { getUserByEmail } from "@/actions/user"
 
 
 export default function LoginForm(){
@@ -55,14 +55,48 @@ export default function LoginForm(){
         handleSignin();
     }
 
-    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
         setError("");
         setSuccess("");
 
+        const validatedFields = LoginSchema.safeParse(values);
+    
+        if(!validatedFields.success){
+            setError("Не правильно заполнены поля!");
+            return;
+        }
+
+        const { email, password } = validatedFields.data;
+
+        const existingUser = await getUserByEmail(email);
+
+        console.log(existingUser);
+
+        if(!existingUser || !existingUser.email || !existingUser.password){
+            setError("Аккаунт с такой почтой не зарегистрирован!")
+            return;
+        }
+
         startTransition(() => {
-            login(values).then((data) => {
-                setError(data.error);
-                setSuccess(data.success);
+            signIn("credentials", {
+                email,
+                password,
+                redirect: false,
+            }).then((item) => {
+                if(item?.error){
+                    switch (item?.error) {
+                        case "CredentialsSignin":
+                            setError("Не правильный пароль!");
+                            return;
+                        default:
+                            setError("Что-то пошло нет так!");
+                            return;
+                    }
+                }
+                else{
+                    setSuccess("Авторизация прошла успешно!");
+                    redirect("/documents");
+                }
             });
         })
     }

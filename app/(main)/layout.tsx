@@ -4,10 +4,11 @@ import Spinner from "@/components/Spinner";
 import Navigation from "./_components/Navigation";
 import SearchCommand from "@/components/search-command";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function MainLayot({ children } : { children : React.ReactNode }){
     
-    const { status, update } = useSession();
+    const { status } = useSession();
     
     if(status === "loading"){
         return (
@@ -17,9 +18,7 @@ export default function MainLayot({ children } : { children : React.ReactNode })
         );
     }
 
-    if(status === 'unauthenticated'){
-        update();
-    }
+    if(status === "unauthenticated") redirect("/");
 
     return(
         <div className="h-full flex dark:bg-[#1F1F1F]">
