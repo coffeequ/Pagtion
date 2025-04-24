@@ -6,7 +6,8 @@
 //   secret: "sk_dev_vfy2JEEY_ZrdQsxWANysu2UlPdIgH4rEFNPkHplGFr4mfTUKtAt2QV5oA3X93EHq",
 // });
 
-export async function POST(request: Request) {
+//request: Request
+export async function POST() {
     // const token = await getToken({
     //     req: request,
     //     secret: process.env.NEXTAUTH_SECRET,
