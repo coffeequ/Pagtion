@@ -70,7 +70,7 @@ export default function LoginForm(){
 
         const existingUser = await getUserByEmail(email);
 
-        console.log(existingUser);
+        //console.log(existingUser);
 
         if(!existingUser || !existingUser.email || !existingUser.password){
             setError("Аккаунт с такой почтой не зарегистрирован!")
