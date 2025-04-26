@@ -135,7 +135,7 @@ export default function Publish({ initialData, refresh } : IPublishProps) {
                                     Опубликовать эту заметку
                                 </p>
                                 <span className="text-xs text-muted-foreground mb-4">
-                                    Поделить своей заметкой с другими.
+                                    Поделить своей заметкой с другими
                                 </span>
                                 <Button disabled = {isSubmitting} onClick={onPublished} className="w-full text-xs" size="sm">
                                     Опубликовать

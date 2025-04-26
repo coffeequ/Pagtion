@@ -40,5 +40,5 @@ export default async function register(values: z.infer<typeof RegisterSchema>){
 
     sendPasswordConfirmEmail(verificationToken.email, verificationToken.token);
 
-    return { success: "Код подтверждения отправлен на почту!" };
+    return { success: "Аккаунт был успешно создан!" };
 }

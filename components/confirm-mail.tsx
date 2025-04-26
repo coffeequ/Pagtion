@@ -11,11 +11,11 @@ export default function ConfirmMail(){
 
     const { data } = useSession();
 
-    const [statusMailVerified, setStatusMailVerified] = useState<boolean>(true);
+    const [statusMailVerified, setStatusMailVerified] = useState<boolean>(false);
 
-    useEffect(() => {
-        // console.log("Метод сработал");
-        
+    const [isPost, setIsPost] = useState(false);
+
+    useEffect(() => {        
         const checkEmailVerified = async () => {
             const existingUser = await getUserByEmail(data?.user?.email as string);
             
@@ -23,22 +23,23 @@ export default function ConfirmMail(){
                 setStatusMailVerified(true);
                 return;
             }
-            else{
-                setStatusMailVerified(false);
-                return;
-            }
         }
         checkEmailVerified();
     }, [])
 
     const onClick = async () => {
-        // console.log("Отправка...");
+
+        setIsPost(true);
+
+        setTimeout(() => {
+            setIsPost(false);
+        }, 1000)
+
         const existingUser = await getUserByEmail(data?.user?.email as string);
-            
+
         if(!existingUser!.emailVerified){
             const verificationToken = await generateVerificationToken(existingUser!.email!);
             sendPasswordConfirmEmail(verificationToken.email, verificationToken.token);
-            // console.log("Отправленно");
             return;
         }
 
@@ -46,10 +47,20 @@ export default function ConfirmMail(){
     }
 
     return (
-        <div>
-            <Button onClick={onClick} disabled={statusMailVerified}>
-                Отправить письмо на почту
+        isPost ? (
+            <Button disabled={true}>
+                Письмо для подтверждение было отправлено!
             </Button>
-        </div>
+        ):(
+            <Button disabled={statusMailVerified} onClick={onClick}>
+                {
+                    statusMailVerified ? (
+                        "Почта подтверждена"
+                    ):(
+                        "Отправить пиьсмо для подтверждения"
+                    )
+                }
+            </Button>
+        )
     );
 }
