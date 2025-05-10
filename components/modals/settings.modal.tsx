@@ -5,8 +5,10 @@ import { useSettings } from "@/hooks/use-settings";
 import { Label } from "@/components/ui/label";
 import { ModeToggle } from "@/components/mode-toggle";
 import ConfirmMail from "@/components/confirm-mail"
+import { useMemo } from "react";
 
 export default function SettingsModal(){
+
     const settings = useSettings();
 
     return (
