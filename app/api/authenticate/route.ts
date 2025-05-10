@@ -32,11 +32,11 @@ export async function POST (req: Request){
             status: 201,
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
         });
     }
     else{
-        return new Response(JSON.stringify({error: "Ошибка авторизации"}), {
+        return new Response(JSON.stringify({error: "Не правильно введён пароль!"}), {
             status: 404,
             headers:{
                 "Content-Type": "application/json"
