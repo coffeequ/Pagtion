@@ -1,5 +1,3 @@
-import { prisma } from "@/lib/prisma";
-
 export async function DEL(req: Request){
 
     const data = await req.json();
