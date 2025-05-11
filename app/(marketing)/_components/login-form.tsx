@@ -77,27 +77,25 @@ export default function LoginForm(){
             return;
         }
 
-        startTransition(() => {
-            signIn("credentials", {
+        startTransition(async () => {
+            const res = await signIn("credentials", {
                 email,
                 password,
-                redirect: false,
-            }).then((item) => {
-                if(item?.error){
-                    switch (item?.error) {
-                        case "CredentialsSignin":
-                            setError("Не правильный пароль!");
-                            return;
-                        default:
-                            setError("Что-то пошло нет так!");
-                            return;
+            })
+            if(res?.error){
+                switch (res?.error) {
+                    case "CredentialsSignin":
+                        setError("Не правильный пароль!");
+                        return;
+                    default:
+                        setError("Что-то пошло нет так!");
+                        return;
                     }
                 }
-                else{
-                    setSuccess("Авторизация прошла успешно!");
-                    redirect("/documents");
-                }
-            });
+            else{
+                setSuccess("Авторизация прошла успешно!");
+                redirect("/documents");
+            }
         })
     }
 
