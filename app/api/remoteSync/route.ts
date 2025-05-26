@@ -45,7 +45,7 @@ export async function PUT(req: Request){
             }
         );
 
-        const body = {message: `Заметка: ${document.id} была успешно создана!`};
+        const body = {message: `Заметка: ${document.id} была успешно обновлена!`};
 
         return new Response(JSON.stringify(body), {
             status: 201
