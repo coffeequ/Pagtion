@@ -7,13 +7,11 @@ export async function POST (req: Request){
 
     const body: z.infer<typeof LoginSchema> = await req.json();
 
-    //console.log(body);
-
     const validatedFields = LoginSchema.safeParse(body);
 
     if(!validatedFields.success){
         return new Response(JSON.stringify({ error: "Не правильно заполнены поля!" }), {
-            status: 200
+            status: 404
         });
     }
 
@@ -22,7 +20,7 @@ export async function POST (req: Request){
     const user = await getUserByEmail(email);
     
     if(!user || !user.password) return new Response(JSON.stringify({ error: "Ошибка авторизации" }), {
-        status: 404,
+        status: 403,
     });
     
     const passwordMatch = await bcrypt.compare(password, user.password);          
@@ -32,12 +30,12 @@ export async function POST (req: Request){
             status: 201,
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
         });
     }
     else{
-        return new Response(JSON.stringify({error: "Ошибка авторизации"}), {
-            status: 404,
+        return new Response(JSON.stringify({error: "Не правильно введён пароль!"}), {
+            status: 403,
             headers:{
                 "Content-Type": "application/json"
             }

@@ -7,6 +7,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import ConfirmMail from "@/components/confirm-mail"
 
 export default function SettingsModal(){
+
     const settings = useSettings();
 
     return (

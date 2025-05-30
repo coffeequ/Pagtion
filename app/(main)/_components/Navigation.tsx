@@ -134,7 +134,7 @@ export default function Navigation(){
     return(
         <>
             <aside ref={sidebarRef} className={cn(
-                    "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[9999]",
+                    "group/sidebar h-full bg-secondary overflow-y-auto relative flex flex-col",
                     isResetting && "transition-all ease-in-out duration-300", isMobile && "w-0"
                 )}>
                         
@@ -158,19 +158,21 @@ export default function Navigation(){
                         onClick={settings.onOpen}
                     />
                     <Item onClick = {handleCreateNote} label = "Новая страница" icon = {PlusCircle} />
-                </div>
-                <hr className="mt-4"/>
-                <div className="mt-4">
-                <DocumentList collapse={collapse} isMobile={isMobile} />
-                <Item onClick={handleCreateNote} label="Добавить страницу" icon={Plus}/>
-                   <Popover>
-                        <PopoverTrigger className="w-full mt-4">
+                    <Popover>
+                        <PopoverTrigger className="w-full">
                             <Item label="Корзина" icon={Trash}/>
                         </PopoverTrigger>
                         <PopoverContent className="p-0 w-72" side = {isMobile ? "bottom" : "right"}>
                             <TrashBox/>
                         </PopoverContent>  
                    </Popover>
+                </div>
+                <hr className="mt-2"/>
+                <div className="flex-1 overflow-y-auto mt-4">
+                    <DocumentList collapse={collapse} isMobile={isMobile} />
+                    <div className="mt-4 mb-4">
+                        <Item onClick={handleCreateNote} label="Добавить страницу" icon={Plus}/>
+                    </div>
                 </div>
                 <div onMouseDown={handleMouseDown} 
                     onClick={resetWidth} 
