@@ -3,7 +3,6 @@ import GetAllDocuments from "@/actions/GetAllDocuments";
 export async function POST(req: Request){
 
     try {
-
         const { id } = await req.json();
 
         const document = await GetAllDocuments(id);
