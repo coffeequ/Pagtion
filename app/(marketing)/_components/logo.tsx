@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const fontManrope = Manrope({
     subsets: ["cyrillic", 'latin'],
-    weight: ["400", "600"]
+    weight: ["300", "400"]
 });
 
 export default function Logo() {

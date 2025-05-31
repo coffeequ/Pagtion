@@ -9,7 +9,6 @@ import Link from "next/link";
 import { User } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useEffect } from "react";
 
 export default function Navbar(){
     
@@ -19,15 +18,13 @@ export default function Navbar(){
 
     const userImage = data?.user?.image;
 
-    useEffect(() => {
-        
-    }, [])
-
     return(
         <div className= {cn("z-50 bg-background dark:bg-[#1F1F1F] fixed top-0 grid grid-cols-5 gap-1 items-center w-full p-2 pt-3", scrolled && "shadow-sm bg-background/55 backdrop-blur-md")}>
             <div></div>
             <Logo/>
-            <div></div>
+            <div>
+                <span>Приложение</span>
+            </div>
             {
                 status === "loading" && (
                     <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-1">
@@ -37,8 +34,8 @@ export default function Navbar(){
             }
             {
                 status === "authenticated" && (
-                    <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-1">
-                        <Avatar>
+                    <div className="md:ml-auto md:justify-end md:items-center justify-between w-full flex items-center gap-x-1">
+                        <Avatar className="flex justify-center items-center">
                         {
                             !userImage ? (
                                 <User/>
@@ -48,22 +45,20 @@ export default function Navbar(){
                         }
                         </Avatar>
                         <span>|</span>
-                        <Button variant="ghost">
-                            <Link href="/documents">
-                                Перейти
-                            </Link>
-                        </Button>
+                        <Link href="/documents">
+                            <Button variant="ghost">Перейти</Button>
+                        </Link>
                     </div>
                 )
             }
             {
                 status === "unauthenticated" && (
                     <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-1">
-                        <Button variant="ghost">
-                            <Link href="/login">
+                        <Link href="/login">
+                            <Button variant="ghost">
                                 Авторизация
-                            </Link>
-                        </Button>
+                            </Button>        
+                        </Link>
                     </div>
                 )
             }

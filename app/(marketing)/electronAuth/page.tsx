@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
-import GetAllDocuments from "@/actions/GetAllDocuments";
 
 export default function ElectronRedirest(){
     const [redirectUrl, setRedirectUrl] = useState("");
@@ -15,8 +14,7 @@ export default function ElectronRedirest(){
                 const email = session.user.email;
                 const name = session.user.name;
                 const image = session.user.image;
-                const documents = await GetAllDocuments(userId!);
-                const url = `pagtion://auth?id=${encodeURIComponent(userId!)}&email=${encodeURIComponent(email!)}&name=${encodeURIComponent(name!)}&image=${encodeURIComponent(image!)}&documents=${encodeURIComponent(JSON.stringify(documents)!)}`;
+                const url = `pagtion://auth?id=${encodeURIComponent(userId!)}&email=${encodeURIComponent(email!)}&name=${encodeURIComponent(name!)}&image=${encodeURIComponent(image!)}`;
                 setRedirectUrl(url);
             }
         }
