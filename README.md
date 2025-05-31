@@ -18,8 +18,6 @@
   npm run buld
 ```
 
-
-
 ### Настольная оффлайн версия
 Также доступна [настольная версия приложения](https://github.com/coffeequ/PagtionDesktop) с полной синхронизацией* заметок между сервисами.
 
@@ -28,9 +26,6 @@
 ```
 DATABASE_URL="postgresql://..."" <-- Ваша ссылка к базе данных
 ```
-
-
-### Или просто [скачать последнюю актуальную версию](https://github.com/coffeequ/PagtionDesktop/releases/tag/v0.0.5)
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
