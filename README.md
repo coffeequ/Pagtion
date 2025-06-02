@@ -37,7 +37,7 @@ DATABASE_URL="postgresql://..."" <-- Ваша ссылка к базе данн�
 1. authenticate;
 2. remoteSync.
 
-Также были использовался Deep-link за счет страниц: electronRedirectOauth и electronAuth, для авторизации через внешние провайдеры.
+Также использовался Deep-link за счет страниц: electronRedirectOauth и electronAuth, для авторизации через внешние провайдеры.
 
 ## Шаблон (На всякий случай пусть будет здесь)
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
