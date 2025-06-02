@@ -18,16 +18,28 @@
   npm run buld
 ```
 
-### Настольная оффлайн версия
-Также доступна [настольная версия приложения](https://github.com/coffeequ/PagtionDesktop) с полной синхронизацией* заметок между сервисами.
+### файл .env:
 
-*Для этого необходимо подключить базу данных в Prisma. В .env файле определить строку подключения базы данных
-
+- База данных: 
 ```
 DATABASE_URL="postgresql://..."" <-- Ваша ссылка к базе данных
 ```
+#### Также: 
+- Для хранения файлов использовался сервис: Edge strore;
+- Для авторизации использовались внешние провайдеры: Google, Yandex;
+- Для отправки писем использовался SMTP от gmail;
+- Для авторизации использовалаьс библиотека NextAuth.
 
+### Настольная версия
+Также доступна [настольная версия приложения](https://github.com/coffeequ/PagtionDesktop) с полной синхронизацией* заметок между сервисами.
 
+* Синхронизация происходила за счет HTTP запросов к эндпоинтам сайта:
+1. authenticate;
+2. remoteSync.
+
+Также были использовался Deep-link за счет страниц: electronRedirectOauth и electronAuth для авторизации через внешние провайдеры.
+
+## Шаблон (На всякий случай пусть будет здесь)
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
