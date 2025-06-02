@@ -9,10 +9,11 @@ interface IUpdateProps {
     content?: string,
     coverImage?: string,
     icon?: string,
-    isPublished?: boolean
+    isPublished?: boolean,
+    isArchived?: boolean
 }
 
-export default async function update({ documentId, userId, title, content, coverImage, icon, isPublished } : IUpdateProps){
+export default async function update({ documentId, userId, title, content, coverImage, icon, isPublished, isArchived } : IUpdateProps){
     const exsitingDocument = await prisma.document.findFirst({
         where:{
             userId,
@@ -34,7 +35,8 @@ export default async function update({ documentId, userId, title, content, cover
             content,
             coverImage,
             icon,
-            isPublished
+            isPublished,
+            isArchived
         }
     });
     return updateDocument;

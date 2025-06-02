@@ -25,9 +25,9 @@ export default function Menu({documentId} : IMenuProps) {
 
     const { data } = useSession();
 
-    const userName = data?.user?.name;
-
     const userId = data?.user?.id;
+
+    const userName = data?.user?.name;
 
     function onArchive() {
         const promise = archived(documentId, userId).then(() => {
@@ -54,11 +54,10 @@ export default function Menu({documentId} : IMenuProps) {
                     <Trash className="h-4 w-4 mr-2" />
                     Удалить
                 </DropdownMenuItem>
-                <DropdownMenuSeparator>
-                    <div className="text-xs text-muted-foreground p-2">
-                        Последний кто редактировал: {userName}
-                    </div>
-                </DropdownMenuSeparator>
+                <DropdownMenuSeparator/>
+                <div className="text-xs text-muted-foreground p-2">
+                    <span>Последний кто редактировал: {userName}</span>
+                </div>
             </DropdownMenuContent>
         </DropdownMenu>
     );

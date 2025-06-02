@@ -41,7 +41,8 @@ export async function PUT(req: Request){
                 title: data.title,
                 content: data.content === null ? undefined : data.content,
                 icon: data.icon === null ? undefined : data.icon,
-                isPublished: data.isPublished
+                isPublished: data.isPublished,
+                isArchived: data.isArchived
             }
         );
 

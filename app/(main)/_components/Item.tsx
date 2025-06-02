@@ -44,7 +44,7 @@ export default function Item( {id, label, onClick, icon:Icon, active, expanded, 
         });
         toast.promise(promise, {
             loading: "Перемещение в мусорку...",
-            success: "Удаление произошло успешно!",
+            success: "Перемещение в мусорку произошло успешно!",
             error: "Ошибка перемещения в мусорку."
         });
     }
