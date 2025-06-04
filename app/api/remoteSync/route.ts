@@ -1,6 +1,7 @@
 import { createDocument } from "@/actions/createDocument";
-import remove from "@/actions/removeDocument";
-import update from "@/actions/updateDocument";
+import { exist } from "@/actions/exists";
+import { removeSync } from "@/actions/removeSync";
+import updateSync from "@/actions/updateSync";
 import { Document } from "@prisma/client";
 
 export async function POST(req: Request){
@@ -34,7 +35,10 @@ export async function PUT(req: Request){
     try {
         const data: Document = await req.json();
 
-        const document = await update(
+        const documentExist = await exist(data.id, data.userId);
+
+        if(documentExist){
+            const document = await updateSync(
             { 
                 documentId: data.id,
                 userId: data.userId,
@@ -43,14 +47,16 @@ export async function PUT(req: Request){
                 icon: data.icon === null ? undefined : data.icon,
                 isPublished: data.isPublished,
                 isArchived: data.isArchived
-            }
-        );
+            });
+            const body = {message: `Заметка: ${document.id} была успешно обновлена!`};
+            return new Response(JSON.stringify(body), {
+                status: 201
+            });
+        }
+        else{
+            return new Response(JSON.stringify(documentExist), {status: 201})
+        }
 
-        const body = {message: `Заметка: ${document.id} была успешно обновлена!`};
-
-        return new Response(JSON.stringify(body), {
-            status: 201
-        })
     } catch (error) {
         console.log(error);
         return new Response(JSON.stringify(error), { status: 500 });
@@ -61,14 +67,25 @@ export async function DELETE(req: Request){
 
     try {
         const data: Document = await req.json();
+        
+        const documentExist = await exist(data.id, data.userId);
 
-        const document = await remove(data.id, data.userId);
+        if(documentExist){
+            const document = await removeSync(data.id, data.userId);
 
-        const body = {message: `Заметка: ${document.id} была успешно создана!`};
-
-        return new Response(JSON.stringify(body), {
-            status: 201
-        })
+            if(document){
+                    const body = {message: `Заметка: ${document.id} была успешно создана!`};
+                    return new Response(JSON.stringify(body), {
+                    status: 201
+                })
+            }
+            else{
+                return new Response(JSON.stringify(data), {status: 201});
+            }
+        }
+        else{
+            return new Response(JSON.stringify(documentExist), {status: 201})
+        }
     } catch (error) {
         console.log(error);
         return new Response(JSON.stringify(error), { status: 500 });

@@ -22,11 +22,14 @@ export async function POST (req: Request){
     if(!user || !user.password) return new Response(JSON.stringify({ error: "Ошибка авторизации" }), {
         status: 403,
     });
+
+    const { name, id, emailVerified, image} = user
     
     const passwordMatch = await bcrypt.compare(password, user.password);          
-    
+
     if(passwordMatch){
-        return new Response(JSON.stringify(user), {
+        console.log({email, name, id, emailVerified, image});
+        return new Response(JSON.stringify({email, name, id, emailVerified, image}), {
             status: 201,
             headers: {
                 "Content-Type": "application/json"

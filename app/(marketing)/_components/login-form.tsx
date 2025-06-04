@@ -81,6 +81,7 @@ export default function LoginForm(){
             const res = await signIn("credentials", {
                 email,
                 password,
+                redirect: false
             })
             if(res?.error){
                 switch (res?.error) {
