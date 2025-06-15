@@ -11,16 +11,15 @@ export default function ConfirmMail(){
 
     const { data } = useSession();
 
-    const [statusMailVerified, setStatusMailVerified] = useState<boolean>(false);
+    const [statusMailVerified, setStatusMailVerified] = useState<boolean>(true);
 
     const [isPost, setIsPost] = useState(false);
 
     useEffect(() => {        
         const checkEmailVerified = async () => {
             const existingUser = await getUserByEmail(data?.user?.email as string);
-            
-            if(existingUser!.emailVerified){
-                setStatusMailVerified(true);
+            if(!existingUser!.emailVerified){
+                setStatusMailVerified(false);
                 return;
             }
         }
