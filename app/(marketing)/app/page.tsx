@@ -13,7 +13,7 @@ export default function App(){
                         <span className="font-bold text-balance antialiased text-4xl mb-4">
                             Загрузите приложение Pagtion на ПК, чтобы получить лучший опыт взаимодействия с заметками.
                         </span>
-                        <Link href="https://github.com/coffeequ/PagtionDesktop/releases/download/v0.0.8/pagtion.0.0.8.msi">
+                        <Link href="https://github.com/coffeequ/PagtionDesktop/releases/download/v0.0.9/pagtion.0.0.9.msi">
                             <Button>Установить</Button>
                         </Link>
                     </div>
